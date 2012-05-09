@@ -1,6 +1,7 @@
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
 
-public class Spieler1{
+public class Spieler1 {
 	
 	static int key;
 
@@ -28,6 +29,20 @@ public class Spieler1{
     		Spielfeld.feld();
     		Spielfeld.ziel();
     		//Spielfeld.mauer();
+    		/////KeyListener neu mit Key pressed//////
+    		if(StdDraw.isKeyPressed(KeyEvent.VK_W)) if(!spieler1.intersects(Spielfeld.oben)) spieler1.y = spieler1.y + 5; 
+    		if(StdDraw.isKeyPressed(KeyEvent.VK_S)) if(!spieler1.intersects(Spielfeld.unten)) spieler1.y = spieler1.y - 5;
+    		if(StdDraw.isKeyPressed(KeyEvent.VK_A)) if(!spieler1.intersects(Spielfeld.links)) spieler1.x = spieler1.x - 5;
+    		if(StdDraw.isKeyPressed(KeyEvent.VK_D)) if(!spieler1.intersects(Spielfeld.rechts)) spieler1.x = spieler1.x + 5;
+    		if(StdDraw.isKeyPressed(KeyEvent.VK_B) && Spielfeld.bombe == false && Spielfeld.explosion == false){
+            	Spielfeld.bombe = true;
+            	Spielfeld.bx = spieler1.x;
+            	Spielfeld.by = spieler1.y;
+            	} 
+    		if (spieler1.intersects(Spielfeld.ziel)) Menu.end();
+    			
+    		///// KeyListener alt, mit Keytyped//////////
+    		/*
     		if (StdDraw.hasNextKeyTyped()) {
                 char ch = StdDraw.nextKeyTyped();
                 if (ch == 's') { up = false; down = true;}
@@ -44,9 +59,11 @@ public class Spieler1{
     		if (down && !spieler1.intersects(Spielfeld.unten)) spieler1.y = spieler1.y - 10;
     		if (left && !spieler1.intersects(Spielfeld.links)) spieler1.x = spieler1.x - 10;
     		if (right && !spieler1.intersects(Spielfeld.rechts)) spieler1.x = spieler1.x + 10;
-    		if (spieler1.intersects(Spielfeld.ziel)) Menu.end();
+    		if (spieler1.intersects(Spielfeld.ziel)) Menu.end();*/
     		StdDraw.filledRectangle(spieler1.x+15, spieler1.y+15, 15, 15);
     		StdDraw.show(20);
     		}
     	}
+
+	
     }

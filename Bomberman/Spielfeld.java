@@ -32,8 +32,14 @@ public class Spielfeld {
         StdDraw.rectangle(950, i, 25, 25);
         StdDraw.rectangle(i, 50, 25, 25);
         StdDraw.rectangle(i, 950, 25, 25);
+        
         i = i+50;
         }
+    	for(int x=150;x<= 850; x+=100){
+    		for(int y = 150; y <= 850;y+=100){
+    			StdDraw.filledRectangle(x, y, 25, 25);
+    		}
+    	}
     	if (bombe) {
     		StdDraw.filledCircle(bx+15, by+15, 10);
     		Bombe.explosion();

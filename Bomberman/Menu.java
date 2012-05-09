@@ -24,7 +24,7 @@ public class Menu {
                 if (mx>=440 && mx<=560 && my>=410 && my<=490 && StdDraw.mousePressed()){
                         StdDraw.show(100);
                         Spielfeld.start();
-                        }}}
+    }}}
 
 	public static void end() {
         StdDraw.clear(Color.BLACK); 

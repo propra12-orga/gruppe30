@@ -188,7 +188,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 
         draw.addMouseListener(std);
         draw.addMouseMotionListener(std);
-
+        
         frame.setContentPane(draw);
         frame.addKeyListener(std);    // JLabel cannot get keyboard focus
         frame.setResizable(false);
@@ -198,6 +198,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         frame.setJMenuBar(createMenuBar());
         frame.pack();
         frame.requestFocusInWindow();
+        int y= (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+        int x= (int) java.awt.Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        frame.setLocation(x/2 -(frame.getWidth()/2),y/2-(frame.getHeight()/2) );
+
         frame.setVisible(true);
     }
 
