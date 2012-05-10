@@ -1,0 +1,38 @@
+
+public class Notes {}
+	
+/*
+ * int x = spieler.x , mitte des rechtecks 
+ * int y = spieler.y  , 
+ * Koordinaten der Barrieren:
+ * x= 125, 225,325... 8 mal   => ecke unten links
+ * y= 125, 225,325... 8 mal
+ * 
+ * 
+ * w:  nur wenn:  x zwischen 75 und 125, oder 175 und 225 ....., falls y 75
+ * 
+ *    abfrage: for schleife und if abfrage: x+25 > 125 , aber x+25< 125+50, x+25 >  225, aber x+25 < 225 +50
+		if bedingung true: forschleife und if abfrege: y+25 > 125, aber y+25
+
+
+-----------------------
+
+methode: returns punkte, die mittelpunkt der rechtecke beschreiben, zwischen welchen spieler1 steht
+
+int i= 125
+while(i <= 950)
+{
+	if(spieler.x +25 )
+i+=100 
+}
+
+-----------------
+mit intersects: immer nur mit den rechtecken vergleichen die oben/unten/links/rechts sind
+oben:
+spieler1.y+25 (obere seite) ist nur in einem bösen rechteck wenn: >125 aber < 175 , usw
+wenn eins davon zutriffen,  mit spieler1.x +25  und spieler1.x - 25 das gleiche . <== zuerst!!!!!
+Punkt zurückgeben
+
+spieler1.intersects(new Rechteck(Punktx, punkt y)) vielleicht braucht man das auch nicht ???
+
+
