@@ -31,6 +31,47 @@ public class Bomb {
 			}
 			if (count == 3000 / 25 /* 3 Sekunden */) {
 				isVisible = false;
+				Point origin = new Point(getExplosionArray().get(0));
+				
+				for(int i = 1; i <= radius; i++){
+					if(origin.y-i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BLOCK)){
+						break;
+					}
+					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BOX)){
+						bomberman.stage.destroyBox(new Point(origin.x, origin.y-i));
+						break;
+					}
+				}
+				
+				for(int i = 1; i <= radius; i++){
+					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BLOCK)){
+						break;
+					}
+					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BOX)){
+						bomberman.stage.destroyBox(new Point(origin.x, origin.y+i));
+						break;
+					}
+				}
+				
+				for(int i = 1; i <= radius; i++){
+					if(origin.x-i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BLOCK)){
+						break;
+					}
+					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BOX)){
+						bomberman.stage.destroyBox(new Point(origin.x-i, origin.y));
+						break;
+					}
+				}
+				
+				for(int i = 1; i <= radius; i++){
+					if(origin.x+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BLOCK)){
+						break;
+					}
+					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOX)){
+						bomberman.stage.destroyBox(new Point(origin.x+i, origin.y));
+						break;
+					}
+				}
 			}
 			count++;
 		}
@@ -53,7 +94,7 @@ public class Bomb {
 	 * @return
 	 */
 	public boolean canExplodeTo(Point p) {
-		if (bomberman.stage.isPointOnField(p, Stage.BLOCK)) {
+		if (bomberman.stage.isPointOnField(p, Stage.BLOCK) || bomberman.stage.isPointOnField(p, Stage.BOX)) {
 			return false;
 		}
 		return true;

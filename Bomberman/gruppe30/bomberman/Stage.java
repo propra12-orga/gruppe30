@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -16,6 +17,7 @@ public class Stage extends JPanel {
 	public static final char BLOCK = 'a';
 	public static final char PLAYER = 'p';
 	public static final char GATE = 'g';
+	public static final char BOX = 'b';
 	
 	Bomberman bomberman;
 	private char[][] stageArray;
@@ -45,7 +47,13 @@ public class Stage extends JPanel {
 						bomberman.player.setStagePosition(new Point(x, y));
 						break;
 					default:
+						Random rand = new Random();
+						if(rand.nextInt(100) < 50 && !new Point(x,y).equals(new Point(1,2)) &&!new Point(x,y).equals(new Point(2,1))){
+						stageArray[x][y] = 'b';
+						}
+						else{
 						stageArray[x][y] = 0;
+						}
 					}
 				}
 			}
@@ -64,6 +72,17 @@ public class Stage extends JPanel {
 		if (stageArray[p.x][p.y] == field) return true;
 		return false;
 	}
+	
+	/**
+	 * Zerstört Box an Feld-Position p
+	 * @param p Feld-Position
+	 */
+	public void destroyBox(Point p){
+		if(isPointOnField(p, BOX)){
+			stageArray[p.x][p.y] = 0;
+		}
+	}
+	
 	
 	private Image buffer;
 	public void paint(Graphics graphics) {
@@ -89,6 +108,9 @@ public class Stage extends JPanel {
 					case Stage.GATE:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
 						g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.BOX:
+						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
 						break;
 					default:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
@@ -122,4 +144,6 @@ public class Stage extends JPanel {
 		// Doublebuffering
 		graphics.drawImage(buffer, 0, 0, getWidth(), getHeight(), this);
 	}
+	
+	
 }
