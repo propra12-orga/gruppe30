@@ -1,13 +1,13 @@
 aaaaaaaaaaaaaaaaa
-ap              a
+ap  b b  b      a
 a a a a a a a a a
-a               a
+a     b bb      a
 a a a a a a a a a
-a               a
+a     b bb      a
 a a a a a a a a a
-a               a
+a   bbb b  bb   a
 a a a a a a a a a
-a               a
-a a a a a a a a a
-a              ga
+a  b bbbbbbb    a
+a a a a abababa a
+a  bbbb bb     ga
 aaaaaaaaaaaaaaaaa

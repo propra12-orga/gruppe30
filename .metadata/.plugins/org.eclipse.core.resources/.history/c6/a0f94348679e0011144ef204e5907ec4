@@ -1,0 +1,149 @@
+package gruppe30.bomberman;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.RenderingHints;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Random;
+
+import javax.swing.JPanel;
+
+public class Stage extends JPanel {
+	private static final long serialVersionUID = 1L;
+	
+	public static final char BLOCK = 'a';
+	public static final char PLAYER = 'p';
+	public static final char GATE = 'g';
+	public static final char BOX = 'b';
+	
+	Bomberman bomberman;
+	private char[][] stageArray;
+	public Stage(Bomberman bomberman) {
+		this.bomberman = bomberman;
+		setSize(850, 650);
+		setPreferredSize(getSize());
+		
+		stageArray = new char[17][13];
+	}
+	
+	/**
+	 * Lädt ein Spielfeld aus einer Datei
+	 * @param filename
+	 */
+	public void loadStage(String filename) {
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename)));
+			for (int y = 0; y < 13; y++) {
+				String line = in.readLine();
+				for (int x = 0; x < 17; x++) {
+					switch (line.charAt(x)) {
+					case Stage.BLOCK: case Stage.GATE: case Stage.BOX:
+						stageArray[x][y] = line.charAt(x);
+						break;
+					case Stage.PLAYER:
+						bomberman.player.setStagePosition(new Point(x, y));
+						break;
+					default:
+						Random rand = new Random();
+						if(rand.nextInt(100) < 50 && !new Point(x,y).equals(new Point(1,2)) &&!new Point(x,y).equals(new Point(2,1))){
+						stageArray[x][y] = 0;
+						}
+						else{
+						stageArray[x][y] = 0;
+						}
+					}
+				}
+			}
+			repaint();
+		}
+		catch(Exception ex) {}
+	}
+	
+	/**
+	 * Prüft ob auf der Feld-Position p das Feld field ist
+	 * @param p Feld-Position
+	 * @param field Feld
+	 * @return
+	 */
+	public boolean isPointOnField(Point p, char field) {
+		if (stageArray[p.x][p.y] == field) return true;
+		return false;
+	}
+	
+	/**
+	 * Zerstört Box an Feld-Position p
+	 * @param p Feld-Position
+	 */
+	public void destroyBox(Point p){
+		if(isPointOnField(p, BOX)){
+			stageArray[p.x][p.y] = 0;
+		}
+	}
+	
+	
+	private Image buffer;
+	public void paint(Graphics graphics) {
+		if (buffer == null) {
+			buffer = this.createImage(getWidth(), getHeight());
+		}
+		Graphics2D g = (Graphics2D)buffer.getGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		g.clearRect(0, 0, getWidth(), getHeight());
+		if (!bomberman.isRunning) {
+			// Startbildschirm zeichnen
+			g.drawImage(bomberman.imageMap.get("start"), 0, 0, getWidth(), getHeight(), this);
+		}
+		else {
+			// Spielfeld
+			for (int x = 0; x < 17; x++) {
+				for (int y = 0; y < 13; y++) {
+					switch (stageArray[x][y]) {
+					case Stage.BLOCK:
+						g.drawImage(bomberman.imageMap.get("block"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.GATE:
+						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
+						g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.BOX:
+						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
+						break;
+					default:
+						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
+					}
+				}
+			}
+			
+			// Bomben
+			for (Bomb bomb : bomberman.bombList) {
+				if (bomb.isVisible && !bomb.isExploded) {
+					g.drawImage(bomberman.imageMap.get("bomb"), bomb.position.x * 50, bomb.position.y * 50, 50, 50, this);
+				}
+			}
+			
+			// Spieler
+			if (!bomberman.player.isDead)
+				g.drawImage(bomberman.player.image, bomberman.player.position.x, bomberman.player.position.y, 50, 50, this);
+			
+			// Explosionen
+			for (Bomb bomb : bomberman.bombList) {
+				if (bomb.isVisible && bomb.isExploded) {
+					for (Point p : bomb.explosionArray) {
+						g.drawImage(bomberman.imageMap.get("explosion"), p.x * 50, p.y * 50, 50, 50, this);
+					}
+				}
+			}
+		}
+		
+		g.dispose();
+		
+		// Doublebuffering
+		graphics.drawImage(buffer, 0, 0, getWidth(), getHeight(), this);
+	}
+	
+	
+}

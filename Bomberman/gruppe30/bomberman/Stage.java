@@ -40,7 +40,7 @@ public class Stage extends JPanel {
 				String line = in.readLine();
 				for (int x = 0; x < 17; x++) {
 					switch (line.charAt(x)) {
-					case Stage.BLOCK: case Stage.GATE:
+					case Stage.BLOCK: case Stage.GATE: case Stage.BOX:
 						stageArray[x][y] = line.charAt(x);
 						break;
 					case Stage.PLAYER:
@@ -49,7 +49,7 @@ public class Stage extends JPanel {
 					default:
 						Random rand = new Random();
 						if(rand.nextInt(100) < 50 && !new Point(x,y).equals(new Point(1,2)) &&!new Point(x,y).equals(new Point(2,1))){
-						stageArray[x][y] = 'b';
+						stageArray[x][y] = 0;  	//////// für zufällig erzeugte Blöcke  ='b' und bs aus Textdatei entfernen
 						}
 						else{
 						stageArray[x][y] = 0;
