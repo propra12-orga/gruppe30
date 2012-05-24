@@ -19,6 +19,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	private Bomberman bomberman;
 	JMenu game;
 	JMenuItem newGame;
+	JMenuItem newGame2;
 	JMenuItem exit;
 	JMenu about;
 	JMenuItem gruppe30;
@@ -31,6 +32,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		newGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK));
 		newGame.addActionListener(this);
 		game.add(newGame);
+		
+		newGame2 = new JMenuItem("2 Spieler");
+		newGame2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Event.CTRL_MASK));
+		newGame2.addActionListener(this);
+		game.add(newGame2);
 		
 		game.add(new JSeparator());
 		
@@ -54,7 +60,12 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == newGame) {
 			// Neues Spiel starten
-			bomberman.startGame();
+			bomberman.startGame(1);
+		}
+		
+		else if (e.getSource() == newGame2) {
+			// Neues Spiel starten
+			bomberman.startGame(2);
 		}
 		else if (e.getSource() == exit) {
 			// Programm beenden

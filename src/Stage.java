@@ -15,6 +15,7 @@ public class Stage extends JPanel {
 	
 	public static final char BLOCK = 'a';
 	public static final char PLAYER = 'p';
+	public static final char PLAYER2 = 'l';
 	public static final char GATE = 'g';
 	public static final char BOX = 'b';
 	
@@ -44,6 +45,11 @@ public class Stage extends JPanel {
 						break;
 					case Stage.PLAYER:
 						bomberman.player.setStagePosition(new Point(x, y));
+						stageArray[x][y] = ' ';
+						break;
+					case Stage.PLAYER2:
+						bomberman.player2.setStagePosition(new Point(x, y));
+						stageArray[x][y] = ' ';
 						break;
 					default:
 						Random rand = new Random();
@@ -127,6 +133,10 @@ public class Stage extends JPanel {
 			// Spieler
 			if (!bomberman.player.isDead)
 				g.drawImage(bomberman.player.image, bomberman.player.position.x, bomberman.player.position.y, 50, 50, this);
+			
+			if (!bomberman.player2.isDead)
+				g.drawImage(bomberman.player2.image, bomberman.player2.position.x, bomberman.player2.position.y, 50, 50, this);
+			
 			
 			// Explosionen
 			for (Bomb bomb : bomberman.bombList) {

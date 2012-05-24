@@ -7,17 +7,30 @@ public class Player {
 	Bomberman bomberman;
 	Image image;
 	boolean isDead;
-	public Player(Bomberman bomberman) {
+	int playerID;
+	int maxBombs;
+	int bombsActive;
+	
+	public Player(Bomberman bomberman, int playerID) {
 		this.position = new Point(0, 0);
 		this.bomberman = bomberman;
-		this.image = bomberman.imageMap.get("player_right");
+		this.playerID = playerID;
+		maxBombs = 4;
+		bombsActive = 0;
+		if(playerID == 1)
+			this.image = bomberman.imageMap.get("player_right");
+		if(playerID == 2)
+			this.image = bomberman.imageMap.get("player2_right");
 	}
 	
 	/**
 	 * Spieler nach links bewegen
 	 */
 	public void moveLeft() {
-		this.image = bomberman.imageMap.get("player_left");
+		if(playerID == 1)
+			this.image = bomberman.imageMap.get("player_left");
+		if(playerID == 2)
+			this.image = bomberman.imageMap.get("player2_left");
 		Point point;
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x - 10, this.position.y + i);
@@ -40,7 +53,10 @@ public class Player {
 				break;
 			}
 		}
-		this.image = bomberman.imageMap.get("player_right");
+		if(playerID == 1)
+			this.image = bomberman.imageMap.get("player_right");
+		if(playerID == 2)
+			this.image = bomberman.imageMap.get("player2_right");
 	}
 	
 	/**
@@ -103,6 +119,22 @@ public class Player {
 	public void setStagePosition(Point p) {
 		this.position = new Point(p.x * 50, p.y * 50);
 	}
+	
+	/**
+	 * Gibt zurück wie viele Bomben des Spielers im moment ticken
+	 * @return
+	 */
+	public int getActiveBombs(){
+		return this.bombsActive;
+	}
+	/**
+	 * Setzt wie viele Bomben ticken
+	 * @param i Anzahl der Bomben
+	 */
+	public void setActiveBombs(int i){
+		this.bombsActive = i;
+	}
+
 	
 	
 }

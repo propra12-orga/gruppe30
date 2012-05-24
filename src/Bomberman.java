@@ -28,6 +28,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	Stage stage;
 	Player player;
 	List<Bomb> bombList;
+	Player player2;
+	Enemy enemy;
 	Timer timer;
 	List<Integer> keyCodes;
 	Sequencer backgroundSequencer;
@@ -55,11 +57,12 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		loadSounds();
 		
 		// Spieler hinzufügen
-		player = new Player(this);
+		player = new Player(this,1);
+		player2 = new Player(this,2);
 		
 		// Bomben hinzufügen
 		bombList = new ArrayList<Bomb>();
-		//for (int i = 0; i < 8; i++)
+		for (int i = 0; i < 8; i++)
 			bombList.add(new Bomb(this));
 		
 		// 25ms Timer hinzufügen
@@ -101,6 +104,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		imageMap.put("floor", getToolkit().getImage(getClass().getClassLoader().getResource("res/Level.jpg")));
 		imageMap.put("player_left", getToolkit().getImage(getClass().getClassLoader().getResource("res/m2.jpg")));
 		imageMap.put("player_right", getToolkit().getImage(getClass().getClassLoader().getResource("res/m1.jpg")));
+		imageMap.put("player2_left", getToolkit().getImage(getClass().getClassLoader().getResource("res/m21.png")));
+		imageMap.put("player2_right", getToolkit().getImage(getClass().getClassLoader().getResource("res/m11.png")));
 		imageMap.put("bomb", getToolkit().getImage(getClass().getClassLoader().getResource("res/bomb.png")));
 		imageMap.put("explosion", getToolkit().getImage(getClass().getClassLoader().getResource("res/b2.png")));
 		imageMap.put("gate", getToolkit().getImage(getClass().getClassLoader().getResource("res/Gate2.png")));
@@ -180,15 +185,21 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		catch (Exception ex) {}
 	}
 	
+	
 	/**
 	 * Startet das Spiel
+	 * @param mit wie vielen spielern das spiel gestartet wird(max 2 im moment)
 	 */
-	public void startGame() {		
+	public void startGame(int playerCount) {		
 		playMusic(musicMap.get("game"));
-		
+		//enemy.exists = true;
 		isFinished = false;
 		isRunning = true;
 		player.isDead = false;
+		player2.isDead = true;
+		if(playerCount == 2){
+		player2.isDead = false;
+		}
 		for (Bomb bomb : bombList) {
 			bomb.isVisible = false;
 			bomb.isExploded = false;
@@ -207,9 +218,13 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		stopMusic();
 		stage.repaint();
 		isFinished = true;
-		int dialogResult = JOptionPane.showConfirmDialog(this, "Noch ein Spiel?", (player.isDead)?"Verloren ...":"Gewonnen!", JOptionPane.YES_NO_OPTION);
+		Object[] options = { "1 Player", "2 Players", "Main Menu" };
+		int dialogResult = JOptionPane.showOptionDialog(this, "Noch ein Spiel?", (isFinished)?"Gewonnen!":"Verloren ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if (dialogResult == JOptionPane.YES_OPTION) {
-			startGame();
+			startGame(1);
+		}
+		else if (dialogResult == JOptionPane.NO_OPTION) {
+			startGame(2);
 		}
 		else {
 			showStartScreen();
@@ -226,6 +241,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		Integer key = new Integer(e.getKeyCode());
 		if (keyCodes.contains(key))
 			keyCodes.remove(key);
+		
+		
 	}
 	
 	public void keyTyped(KeyEvent e) {
@@ -261,6 +278,11 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 							player.isDead = true;
 							endGame();
 							break;
+						}else	if (player2.getStagePosition().equals(p)) {
+								player2.isDead = true;
+								endGame();
+								break;
+						
 						}
 					}
 				}
@@ -268,27 +290,66 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			if (isPressing(KeyEvent.VK_B)) {
 				/// Bombe legen
 				for (Bomb bomb : bombList) {
-					if (!bomb.isVisible) {
+					if (!bomb.isVisible && player.getActiveBombs() < player.maxBombs && bomb.canLayOn(player.getStagePosition())) {
 						bomb.setToPlayerPos();
+						bomb.setOwner(player);
+						player.setActiveBombs(player.getActiveBombs()+1);
+						System.out.println("bombe hinzu von player 1" + player.getActiveBombs() );
+
 						break;
 					}
+				}
+			}
+			
+			if (isPressing(KeyEvent.VK_L)) {
+				/// Bombe legen
+				if(player2.isDead == false) {
+				for (Bomb bomb : bombList) {
+					if (!bomb.isVisible && player2.getActiveBombs() < player2.maxBombs && bomb.canLayOn(player2.getStagePosition())) {
+						bomb.setToPlayer2Pos();
+						bomb.setOwner(player2);
+						player2.setActiveBombs(player2.getActiveBombs()+1);
+						System.out.println("bombe hinzu von player 2" + player2.getActiveBombs() );
+						break;
+					}
+				}
 				}
 			}
 			/*
 			 *  Spieler Steuerung
 			 */
-			if (isPressing(KeyEvent.VK_LEFT)) {
+			
+			if (isPressing(KeyEvent.VK_A)) {
 				player.moveLeft();
 			}
-			if (isPressing(KeyEvent.VK_RIGHT)) {
+			if (isPressing(KeyEvent.VK_D)) {
 				player.moveRight();
 			}
-			if (isPressing(KeyEvent.VK_UP)) {
+			if (isPressing(KeyEvent.VK_W)) {
 				player.moveUp();
 			}
-			if (isPressing(KeyEvent.VK_DOWN)) {
+			if (isPressing(KeyEvent.VK_S)) {
 				player.moveDown();
 			}
+			
+			//player 2
+			
+				
+
+			if (isPressing(KeyEvent.VK_LEFT)) {
+				player2.moveLeft();
+			}
+			if (isPressing(KeyEvent.VK_RIGHT)) {
+				player2.moveRight();
+			}
+			if (isPressing(KeyEvent.VK_UP)) {
+				player2.moveUp();
+			}
+			if (isPressing(KeyEvent.VK_DOWN)) {
+				player2.moveDown();
+				
+			}
+			
 			// Feld neu zeichnen
 			stage.repaint();
 		}
