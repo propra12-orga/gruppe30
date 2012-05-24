@@ -1,6 +1,7 @@
 
 import java.awt.Image;
 import java.awt.Point;
+import java.util.Timer;
 
 public class Player {
 	Point position;
@@ -10,6 +11,7 @@ public class Player {
 	int playerID;
 	int maxBombs;
 	int bombsActive;
+	boolean bombCooldown;
 	
 	public Player(Bomberman bomberman, int playerID) {
 		this.position = new Point(0, 0);
@@ -134,7 +136,21 @@ public class Player {
 	public void setActiveBombs(int i){
 		this.bombsActive = i;
 	}
-
+	
+	/**
+	 * gibt zurück ob der Spieler im Cooldown vom Bombenlegen ist
+	 * @return
+	 */
+	public boolean isOnCooldown(){
+		return bombCooldown;
+	}
+	
+	/**
+	 * Setzt den Cooldown der Spielers
+	 */
+	public void setBombCooldown(){
+		bombCooldown = true;
+	}
 	
 	
 }
