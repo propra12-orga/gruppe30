@@ -113,7 +113,7 @@ public class Bomb {
 	public boolean canLayOn(Point p){
 		boolean erg = true;
 		for (Bomb bomb : bomberman.bombList) {
-			if (p.equals(bomb.position)) {
+			if (p.equals(bomb.position) && bomb.isVisible) {
 				erg = false;
 				break;
 			}

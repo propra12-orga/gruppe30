@@ -1,7 +1,6 @@
 
 import java.awt.Image;
 import java.awt.Point;
-import java.util.Timer;
 
 public class Player {
 	Point position;
