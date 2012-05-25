@@ -18,6 +18,7 @@ public class Stage extends JPanel {
 	public static final char PLAYER2 = 'l';
 	public static final char GATE = 'g';
 	public static final char BOX = 'b';
+	public static final char BOXGATE = 'x';
 	
 	Bomberman bomberman;
 	private char[][] stageArray;
@@ -40,7 +41,7 @@ public class Stage extends JPanel {
 				String line = in.readLine();
 				for (int x = 0; x < 17; x++) {
 					switch (line.charAt(x)) {
-					case Stage.BLOCK: case Stage.GATE: case Stage.BOX:
+					case Stage.BLOCK: case Stage.GATE: case Stage.BOX: case Stage.BOXGATE:
 						stageArray[x][y] = line.charAt(x);
 						break;
 					case Stage.PLAYER:
@@ -88,6 +89,13 @@ public class Stage extends JPanel {
 		}
 	}
 	
+	// speziell für Boxen hinter denen das Gate liegt
+	public void destroyBoxGate(Point p){
+		if(isPointOnField(p, BOXGATE)){
+			stageArray[p.x][p.y] = 'g';
+		}
+	}
+	
 	
 	private Image buffer;
 	public void paint(Graphics graphics) {
@@ -115,6 +123,9 @@ public class Stage extends JPanel {
 						g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
 						break;
 					case Stage.BOX:
+						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.BOXGATE:
 						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
 						break;
 					default:

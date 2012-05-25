@@ -212,7 +212,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			bomb.isExploded = false;
 		}
 		
-		stage.loadStage("res/level02.txt");
+		stage.loadStage("res/level02x.txt");
 		
 		stage.repaint();
 	}
