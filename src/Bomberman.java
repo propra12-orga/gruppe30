@@ -209,8 +209,11 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		
 		player.isDead = false;
 		player2.isDead = true;
+		player.setActive(true);
+		player2.setActive(false);
 		if(playerCount == 2){
 		player2.isDead = false;
+		player2.setActive(true);
 		}
 		for (Bomb bomb : bombList) {
 			bomb.isVisible = false;
@@ -311,7 +314,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 							player.isDead = true;
 							endGame();
 							break;
-						}else if (player2.getStagePosition().equals(p)) {
+						}else if (player2.getStagePosition().equals(p) && player2.isActive()) {
 								player2.isDead = true;
 								endGame();
 								break;
