@@ -15,7 +15,7 @@ public class Player {
 		this.position = new Point(0, 0);
 		this.bomberman = bomberman;
 		this.playerID = playerID;
-		maxBombs = 4;
+		maxBombs = 1;
 		bombsActive = 0;
 		if(playerID == 1)
 			this.image = bomberman.imageMap.get("player_right");
@@ -35,6 +35,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x - 10, this.position.y + i);
 			if (canPlayerMoveTo(point)) {
+				bomberman.stage.PlayerpickPowerup(point);
 				this.position = point;
 				break;
 			}
@@ -49,6 +50,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x + 10, this.position.y + i);
 			if (canPlayerMoveTo(point)) {
+				bomberman.stage.PlayerpickPowerup(point);
 				this.position = point;
 				break;
 			}
@@ -67,6 +69,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x + i, this.position.y - 10);
 			if (canPlayerMoveTo(point)) {
+				bomberman.stage.PlayerpickPowerup(point);
 				this.position = point;
 				break;
 			}
@@ -81,6 +84,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x + i, this.position.y + 10);
 			if (canPlayerMoveTo(point)) {
+				bomberman.stage.PlayerpickPowerup(point);
 				this.position = point;
 				break;
 			}
@@ -99,7 +103,10 @@ public class Player {
 			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'a') || bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'b') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, p.y / 50), 'b') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, (p.y + 49) / 50), 'b') ||
-			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'b'))
+			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'b') || bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'x') ||
+			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, p.y / 50), 'x') ||
+			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, (p.y + 49) / 50), 'x') ||
+			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'x'))
 			return false;
 		return true;
 	}

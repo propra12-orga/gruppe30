@@ -18,6 +18,10 @@ public class Stage extends JPanel {
 	public static final char PLAYER2 = 'l';
 	public static final char GATE = 'g';
 	public static final char BOX = 'b';
+	public static final char BOXGATE = 'x';
+	public static final char BOMBUP = 'z';
+	public static final char POWERUP = 'u';
+	int k;
 	
 	Bomberman bomberman;
 	private char[][] stageArray;
@@ -40,7 +44,7 @@ public class Stage extends JPanel {
 				String line = in.readLine();
 				for (int x = 0; x < 17; x++) {
 					switch (line.charAt(x)) {
-					case Stage.BLOCK: case Stage.GATE: case Stage.BOX:
+					case Stage.BLOCK: case Stage.GATE: case Stage.BOX: case Stage.BOXGATE:
 						stageArray[x][y] = line.charAt(x);
 						break;
 					case Stage.PLAYER:
@@ -79,12 +83,64 @@ public class Stage extends JPanel {
 	}
 	
 	/**
-	 * Zerstört Box an Feld-Position p
+	 * Zerstört Box an Feld-Position p, prüft ob es ein Power-Up gibt
 	 * @param p Feld-Position
 	 */
 	public void destroyBox(Point p){
 		if(isPointOnField(p, BOX)){
 			stageArray[p.x][p.y] = 0;
+			if(Chance()) k = Choose();
+			if(k == 1) Bombup(p);
+			else if(k == 2) Powerup(p);
+		}
+	}
+	
+	// speziell für Boxen hinter denen das Gate liegt
+	public void destroyBoxGate(Point p){
+		if(isPointOnField(p, BOXGATE)){
+			stageArray[p.x][p.y] = 'g';
+		}
+	}
+	
+	// prüft ob es ein Power-Up gibt
+	public boolean  Chance() {
+		int i = (int)(Math.random()*10);
+		if(i > 8) return true;
+		else return false;
+	}
+	
+	// prüft welches Power-Up es gibt
+	public int Choose() {
+		int j = (int)(Math.random()*10);
+		if(j <= 4) return 1;
+		else return 2;
+	}
+	
+	// Bombe +1
+	public void Bombup(Point p) {
+		k = 0;
+		stageArray[p.x][p.y] = 'z';
+	}
+	
+	// Radius +1
+	public void Powerup(Point p) {
+		k = 0;
+		stageArray[p.x][p.y] = 'u';
+	}
+	
+	/**
+	 * Power-Up aufnehmen und entfernen
+	 * @param p Feld-Position
+	 */
+	public void PlayerpickPowerup(Point p) {
+		if (bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'z')) {
+			stageArray[p.x/50][p.y/50] = 0;
+			bomberman.player.maxBombs++;	
+		}
+		if (bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'u')) {
+			stageArray[p.x/50][p.y/50] = 0;
+			Bomb.radius++;
+			
 		}
 	}
 	
@@ -116,6 +172,15 @@ public class Stage extends JPanel {
 						break;
 					case Stage.BOX:
 						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.BOXGATE:
+						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.BOMBUP:
+						g.drawImage(bomberman.imageMap.get("bup"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.POWERUP:
+						g.drawImage(bomberman.imageMap.get("pup"), x * 50, y * 50, 50, 50, this);
 						break;
 					default:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);

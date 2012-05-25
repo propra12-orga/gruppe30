@@ -25,6 +25,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	private static final long serialVersionUID = 1L;
 	boolean isRunning;
 	boolean isFinished;
+	boolean music = true;
 	Stage stage;
 	Player player;
 	List<Bomb> bombList;
@@ -94,7 +95,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	public void showStartScreen() {
 		isRunning = false;
 		stopMusic();
-		playMusic(musicMap.get("start"));
+		if(music)playMusic(musicMap.get("start"));
+		else stopMusic();
 	}
 	
 	/**
@@ -114,6 +116,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		imageMap.put("explosion", getToolkit().getImage(getClass().getClassLoader().getResource("res/b2.png")));
 		imageMap.put("gate", getToolkit().getImage(getClass().getClassLoader().getResource("res/Gate2.png")));
 		imageMap.put("box", getToolkit().getImage(getClass().getClassLoader().getResource("res/box.jpg")));
+		imageMap.put("bup", getToolkit().getImage(getClass().getClassLoader().getResource("res/bup.jpg")));
+		imageMap.put("pup", getToolkit().getImage(getClass().getClassLoader().getResource("res/pup.jpg")));
 		
 		// Bilder vorladen
 		MediaTracker mTracker = new MediaTracker(this);
@@ -195,7 +199,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 * @param mit wie vielen spielern das spiel gestartet wird(max 2 im moment)
 	 */
 	public void startGame(int playerCount) {		
-		playMusic(musicMap.get("game"));
+		if(music) playMusic(musicMap.get("game"));
+		else stopMusic();
 		//enemy.exists = true;
 		isFinished = false;
 		isRunning = true;
@@ -212,7 +217,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			bomb.isExploded = false;
 		}
 		
-		stage.loadStage("res/level02.txt");
+		stage.loadStage("res/level02x.txt");
 		
 		stage.repaint();
 	}
@@ -226,6 +231,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		stopMusic();
 		stage.repaint();
 		isFinished = true;
+		Bomb.radius = 4;     // setzt Power-ups zurüxk
+		player.maxBombs++;   // "
 		Object[] options = { "1 Player", "2 Players", "Main Menu" };
 		int dialogResult = JOptionPane.showOptionDialog(this, "Noch ein Spiel?", (isFinished)?"Gewonnen!":"Verloren ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if (dialogResult == JOptionPane.YES_OPTION) {

@@ -10,7 +10,7 @@ public class Bomb {
 	Bomberman bomberman;
 	boolean isVisible;
 	boolean isExploded;
-	int radius;
+	static int radius = 4;
 	List<Point> explosionArray;
 	Player owner;
 	
@@ -47,6 +47,10 @@ public class Bomb {
 						bomberman.stage.destroyBox(new Point(origin.x, origin.y-i));
 						break;
 					}
+					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BOXGATE)){
+						bomberman.stage.destroyBoxGate(new Point(origin.x, origin.y-i));
+						break;
+					}
 				}
 				
 				for(int i = 1; i <= radius; i++){
@@ -55,6 +59,10 @@ public class Bomb {
 					}
 					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BOX)){
 						bomberman.stage.destroyBox(new Point(origin.x, origin.y+i));
+						break;
+					}
+					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BOXGATE)){
+						bomberman.stage.destroyBoxGate(new Point(origin.x, origin.y+i));
 						break;
 					}
 				}
@@ -67,6 +75,10 @@ public class Bomb {
 						bomberman.stage.destroyBox(new Point(origin.x-i, origin.y));
 						break;
 					}
+					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BOXGATE)){
+						bomberman.stage.destroyBoxGate(new Point(origin.x-i, origin.y));
+						break;
+					}
 				}
 				
 				for(int i = 1; i <= radius; i++){
@@ -75,6 +87,10 @@ public class Bomb {
 					}
 					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOX)){
 						bomberman.stage.destroyBox(new Point(origin.x+i, origin.y));
+						break;
+					}
+					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOXGATE)){
+						bomberman.stage.destroyBoxGate(new Point(origin.x+i, origin.y));
 						break;
 					}
 				}
@@ -91,7 +107,6 @@ public class Bomb {
 		count = 0;
 		isVisible = true;
 		isExploded = false;
-		radius = 4;
 	}
 	
 	/**
@@ -128,7 +143,7 @@ public class Bomb {
 	 */
 	
 	public boolean canExplodeTo(Point p) {
-		if (bomberman.stage.isPointOnField(p, Stage.BLOCK) || bomberman.stage.isPointOnField(p, Stage.BOX)) {
+		if (bomberman.stage.isPointOnField(p, Stage.BLOCK) || bomberman.stage.isPointOnField(p, Stage.BOX) || bomberman.stage.isPointOnField(p, Stage.BOXGATE)) {
 			return false;
 		}
 		return true;

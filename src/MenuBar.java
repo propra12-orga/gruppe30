@@ -21,6 +21,9 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JMenuItem newGame;
 	JMenuItem newGame2;
 	JMenuItem exit;
+	JMenu options;
+	JMenuItem musicon;
+	JMenuItem musicoff;
 	JMenu about;
 	JMenuItem gruppe30;
 	public MenuBar(Bomberman bomberman) {
@@ -47,6 +50,20 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		
 		add(game);
 		
+		options = new JMenu("Options");
+		
+		musicon = new JMenuItem("Music on");
+		musicon.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
+		musicon.addActionListener(this);
+		options.add(musicon);
+		
+		musicoff = new JMenuItem("Music off");
+		musicoff.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK));
+		musicoff.addActionListener(this);
+		options.add(musicoff);
+		
+		add(options);
+		
 		about = new JMenu("About");
 		
 		gruppe30 = new JMenuItem("Gruppe30");
@@ -70,6 +87,15 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		else if (e.getSource() == exit) {
 			// Programm beenden
 			System.exit(0);
+		}
+		else if (e.getSource() == musicon) {
+			// Musik anschalten (standart)
+			bomberman.music = true;
+		}
+		else if (e.getSource() == musicoff) {
+			// Musik abschalten
+			bomberman.music = false;
+			bomberman.stopMusic();
 		}
 		else if(e.getSource() == gruppe30) {
 			// Gruppe30 Info anzeigen
