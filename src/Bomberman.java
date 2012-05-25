@@ -114,6 +114,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		imageMap.put("explosion", getToolkit().getImage(getClass().getClassLoader().getResource("res/b2.png")));
 		imageMap.put("gate", getToolkit().getImage(getClass().getClassLoader().getResource("res/Gate2.png")));
 		imageMap.put("box", getToolkit().getImage(getClass().getClassLoader().getResource("res/box.jpg")));
+		imageMap.put("bup", getToolkit().getImage(getClass().getClassLoader().getResource("res/bup.jpg")));
+		imageMap.put("pup", getToolkit().getImage(getClass().getClassLoader().getResource("res/pup.jpg")));
 		
 		// Bilder vorladen
 		MediaTracker mTracker = new MediaTracker(this);

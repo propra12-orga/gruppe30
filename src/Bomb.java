@@ -144,7 +144,7 @@ public class Bomb {
 	 */
 	
 	public boolean canExplodeTo(Point p) {
-		if (bomberman.stage.isPointOnField(p, Stage.BLOCK) || bomberman.stage.isPointOnField(p, Stage.BOX)) {
+		if (bomberman.stage.isPointOnField(p, Stage.BLOCK) || bomberman.stage.isPointOnField(p, Stage.BOX) || bomberman.stage.isPointOnField(p, Stage.BOXGATE)) {
 			return false;
 		}
 		return true;
