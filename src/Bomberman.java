@@ -25,6 +25,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	private static final long serialVersionUID = 1L;
 	boolean isRunning;
 	boolean isFinished;
+	boolean music = true;
 	Stage stage;
 	Player player;
 	List<Bomb> bombList;
@@ -94,7 +95,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	public void showStartScreen() {
 		isRunning = false;
 		stopMusic();
-		playMusic(musicMap.get("start"));
+		if(music)playMusic(musicMap.get("start"));
+		else stopMusic();
 	}
 	
 	/**
@@ -197,7 +199,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 * @param mit wie vielen spielern das spiel gestartet wird(max 2 im moment)
 	 */
 	public void startGame(int playerCount) {		
-		playMusic(musicMap.get("game"));
+		if(music) playMusic(musicMap.get("game"));
+		else stopMusic();
 		//enemy.exists = true;
 		isFinished = false;
 		isRunning = true;
@@ -228,6 +231,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		stopMusic();
 		stage.repaint();
 		isFinished = true;
+		Bomb.radius = 4;     // setzt Power-ups zurüxk
+		player.maxBombs++;   // "
 		Object[] options = { "1 Player", "2 Players", "Main Menu" };
 		int dialogResult = JOptionPane.showOptionDialog(this, "Noch ein Spiel?", (isFinished)?"Gewonnen!":"Verloren ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if (dialogResult == JOptionPane.YES_OPTION) {

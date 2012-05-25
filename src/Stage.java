@@ -137,10 +137,11 @@ public class Stage extends JPanel {
 			stageArray[p.x/50][p.y/50] = 0;
 			bomberman.player.maxBombs++;	
 		}
-		/*if (bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'u')) {
-			bomberman.Bomb.radius++;
-			stageArray[p.x][p.y] = 0;
-		}*/
+		if (bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'u')) {
+			stageArray[p.x/50][p.y/50] = 0;
+			Bomb.radius++;
+			
+		}
 	}
 	
 	
