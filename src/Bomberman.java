@@ -313,11 +313,11 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 							player.isDead = true;
 							endGame();
 							break;
+
 						}else if (player2.getStagePosition().equals(p) && !player2.isDead) {
 								player2.isDead = true;
 								endGame();
 								break;
-						
 						}
 						
 						// Kettenreaktion der bomben

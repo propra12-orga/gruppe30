@@ -11,6 +11,7 @@ public class Player {
 	int maxBombs;
 	int bombsActive;
 	
+	
 	public Player(Bomberman bomberman, int playerID) {
 		this.position = new Point(0, 0);
 		this.bomberman = bomberman;
