@@ -68,7 +68,7 @@ public class Bomb {
 				}
 				
 				for(int i = 1; i <= radius; i++){
-					if(origin.x-i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BLOCK)){
+					if(origin.x-i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BLOCK)){
 						break;
 					}
 					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BOX)){
@@ -82,7 +82,7 @@ public class Bomb {
 				}
 				
 				for(int i = 1; i <= radius; i++){
-					if(origin.x+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BLOCK)){
+					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BLOCK)){
 						break;
 					}
 					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOX)){
