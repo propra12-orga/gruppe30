@@ -24,6 +24,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JMenu options;
 	JMenuItem musicon;
 	JMenuItem musicoff;
+	JMenuItem soundon;
+	JMenuItem soundoff;
 	JMenu about;
 	JMenuItem gruppe30;
 	public MenuBar(Bomberman bomberman) {
@@ -62,6 +64,16 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		musicoff.addActionListener(this);
 		options.add(musicoff);
 		
+		soundon = new JMenuItem("Sound on");
+		soundon.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Event.CTRL_MASK));
+		soundon.addActionListener(this);
+		options.add(soundon);
+		
+		soundoff = new JMenuItem("Sound off");
+		soundoff.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Event.CTRL_MASK));
+		soundoff.addActionListener(this);
+		options.add(soundoff);
+		
 		add(options);
 		
 		about = new JMenu("About");
@@ -91,11 +103,21 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		else if (e.getSource() == musicon) {
 			// Musik anschalten (standart)
 			bomberman.music = true;
+			if(!bomberman.isRunning) bomberman.playMusic(bomberman.musicMap.get("start"));
+			if(bomberman.isRunning) bomberman.playMusic(bomberman.musicMap.get("game"));
 		}
 		else if (e.getSource() == musicoff) {
 			// Musik abschalten
 			bomberman.music = false;
 			bomberman.stopMusic();
+		}
+		else if (e.getSource() == soundon) {
+			// Sound anschalten
+			bomberman.sound = true;
+		}
+		else if (e.getSource() == soundoff) {
+			// Sound abschalten
+			bomberman.sound = false;
 		}
 		else if(e.getSource() == gruppe30) {
 			// Gruppe30 Info anzeigen

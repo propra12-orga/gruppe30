@@ -24,12 +24,12 @@ public class Bomb {
 	public void process() {
 		if (isVisible) {
 			if (count == 0) {
-				bomberman.playSound(bomberman.soundMap.get("ticktock"));
+				if(bomberman.sound) bomberman.playSound(bomberman.soundMap.get("ticktock"));
 			}
 			if (count == 2000 / 25 /* 2 Sekunden */) {
 				explosionArray = getExplosionArray();
 				isExploded = true;
-				bomberman.playSound(bomberman.soundMap.get("bomb"));
+				if(bomberman.sound) bomberman.playSound(bomberman.soundMap.get("bomb"));
 			}
 			if (count == 3000 / 25 /* 3 Sekunden */) {
 				isVisible = false;
