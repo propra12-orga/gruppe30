@@ -34,7 +34,6 @@ public class Bomb {
 			if (count == 3000 / 25 /* 3 Sekunden */) {
 				isVisible = false;
 				owner.setActiveBombs(owner.getActiveBombs()-1);
-				System.out.println("bombe weg " + owner.getActiveBombs() );
 				Point origin = new Point(getExplosionArray().get(0));
 				
 				

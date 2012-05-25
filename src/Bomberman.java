@@ -31,9 +31,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	Player player2;
 	Enemy enemy;
 	Timer timer;
-	Timer cooldownp1;
-	Timer cooldownp2;
 	List<Integer> keyCodes;
+	List<Integer> keyReleasedCodes;
 	Sequencer backgroundSequencer;
 	Map<String, Image> imageMap;
 	Map<String, URL> musicMap;
@@ -82,6 +81,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		showStartScreen();
 		
 		keyCodes = new ArrayList<Integer>();
+		keyReleasedCodes = new ArrayList<Integer>();
 		
 		addKeyListener(this);
 		
@@ -199,13 +199,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		//enemy.exists = true;
 		isFinished = false;
 		isRunning = true;
-		// Bomben Cooldown Timer hinzufügen
-		cooldownp1 = new Timer(100, this);
-		cooldownp2 = new Timer(100, this);
 		player.setActiveBombs(0);
 		player2.setActiveBombs(0);
-		player.bombCooldown = false;
-		player2.bombCooldown = false;
 		
 		player.isDead = false;
 		player2.isDead = true;
@@ -227,6 +222,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 */
 	public void endGame() {
 		keyCodes.clear();
+		keyReleasedCodes.clear();
 		stopMusic();
 		stage.repaint();
 		isFinished = true;
@@ -251,9 +247,11 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	
 	public void keyReleased(KeyEvent e) {
 		Integer key = new Integer(e.getKeyCode());
-		if (keyCodes.contains(key))
+		if (keyCodes.contains(key)){
 			keyCodes.remove(key);
-		
+			if (!keyReleasedCodes.contains(key))
+			keyReleasedCodes.add(key);
+		}
 		
 	}
 	
@@ -273,6 +271,22 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		}
 		return false;
 	}
+	
+	/**
+	 * Prüft ob die Taste keyCode gedrückt und losgelassen wurde
+	 * @param keyCode Taste
+	 * @return
+	 */
+	 public boolean hasReleased(int keyCode){
+		 for(Integer key : keyReleasedCodes){
+			 if(key.equals(keyCode)){
+				 keyReleasedCodes.remove(key);
+				 return true;
+			 }
+				 
+		 }
+		 return false;
+	 }
 	
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == timer && isRunning && !isFinished) {
@@ -307,35 +321,28 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 					}
 				}
 			}
-			if (isPressing(KeyEvent.VK_B)) {
+			if (hasReleased(KeyEvent.VK_B)) {
 				/// Bombe legen
-				if(!player.isOnCooldown()){
+				
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player.getActiveBombs() < player.maxBombs && bomb.canLayOn(player.getStagePosition())) {
 							bomb.setToPlayerPos();
 							bomb.setOwner(player);
 							player.setActiveBombs(player.getActiveBombs()+1);
-							player.setBombCooldown();
-							cooldownp1.start();
-							System.out.println("bombe hinzu von player 1" + player.getActiveBombs() );
-	
 							break;
 						}
 					}
-				}
+				
 			}
 			
-			if (isPressing(KeyEvent.VK_L)) {
+			if (hasReleased(KeyEvent.VK_L)) {
 				/// Bombe legen
-				if(player2.isDead == false && !player2.isOnCooldown()) {
+				if(player2.isDead == false) {
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player2.getActiveBombs() < player2.maxBombs && bomb.canLayOn(player2.getStagePosition())) {
 							bomb.setToPlayer2Pos();
 							bomb.setOwner(player2);
 							player2.setActiveBombs(player2.getActiveBombs()+1);
-							player2.setBombCooldown();
-							cooldownp2.start();
-							System.out.println("bombe hinzu von player 2" + player2.getActiveBombs() );
 							break;
 						}
 					}
@@ -380,15 +387,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			stage.repaint();
 		}
 		
-		// cooldown Timer für das Bombenlegen der Spieler
-		if (e.getSource() == cooldownp1 && isRunning && !isFinished) {
-			player.bombCooldown = false;
-			cooldownp1.stop();
-		}
-		if (e.getSource() == cooldownp2 && isRunning && !isFinished) {
-			player2.bombCooldown = false;
-			cooldownp2.stop();
-		}
 	}
 	
 	public static void main(String args[]) {
