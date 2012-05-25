@@ -7,7 +7,6 @@ public class Player {
 	Bomberman bomberman;
 	Image image;
 	boolean isDead;
-	boolean isActive;
 	int playerID;
 	int maxBombs;
 	int bombsActive;
@@ -144,20 +143,5 @@ public class Player {
 		this.bombsActive = i;
 	}
 	
-	/** 
-	 * Gibt zurück ob der Spieler aktiviert oder deaktiviert ist
-	 * @return
-	 */
-	public boolean isActive(){
-		return this.isActive;
-	}
-	
-	/**
-	 * setzt ob der der Spieler aktiviert ist oder nicht
-	 * @param i
-	 */
-	public void setActive(boolean i){
-		this.isActive = i;
-	}
 	
 }

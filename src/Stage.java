@@ -196,10 +196,10 @@ public class Stage extends JPanel {
 			}
 			
 			// Spieler
-			if (!bomberman.player.isDead && bomberman.player.isActive())
+			if (!bomberman.player.isDead)
 				g.drawImage(bomberman.player.image, bomberman.player.position.x, bomberman.player.position.y, 50, 50, this);
 			
-			if (!bomberman.player2.isDead && bomberman.player2.isActive())
+			if (!bomberman.player2.isDead)
 				g.drawImage(bomberman.player2.image, bomberman.player2.position.x, bomberman.player2.position.y, 50, 50, this);
 			
 			
