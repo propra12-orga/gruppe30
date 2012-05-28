@@ -10,7 +10,9 @@ public class Bomb {
 	Bomberman bomberman;
 	boolean isVisible;
 	boolean isExploded;
-	static int radius = 4;
+	int radius;
+	static int radius1 = 4;
+	static int radius2 = 4;
 	List<Point> explosionArray;
 	Player owner;
 	
@@ -109,6 +111,7 @@ public class Bomb {
 		count = 0;
 		isVisible = true;
 		isExploded = false;
+		radius = radius1;
 	}
 	
 	/**
@@ -119,7 +122,7 @@ public class Bomb {
 		count = 0;
 		isVisible = true;
 		isExploded = false;
-		radius = 4;
+		radius = radius2;
 	}
 	
 	/**

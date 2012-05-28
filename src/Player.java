@@ -36,7 +36,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x - 10, this.position.y + i);
 			if (canPlayerMoveTo(point)) {
-				bomberman.stage.PlayerpickPowerup(point);
+				bomberman.stage.PlayerpickPowerup();
 				this.position = point;
 				break;
 			}
@@ -51,7 +51,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x + 10, this.position.y + i);
 			if (canPlayerMoveTo(point)) {
-				bomberman.stage.PlayerpickPowerup(point);
+				bomberman.stage.PlayerpickPowerup();
 				this.position = point;
 				break;
 			}
@@ -70,7 +70,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x + i, this.position.y - 10);
 			if (canPlayerMoveTo(point)) {
-				bomberman.stage.PlayerpickPowerup(point);
+				bomberman.stage.PlayerpickPowerup();
 				this.position = point;
 				break;
 			}
@@ -85,7 +85,7 @@ public class Player {
 		for (int i : new int[] {0, -10, 10, -20, 20}) {
 			point = new Point(this.position.x + i, this.position.y + 10);
 			if (canPlayerMoveTo(point)) {
-				bomberman.stage.PlayerpickPowerup(point);
+				bomberman.stage.PlayerpickPowerup();
 				this.position = point;
 				break;
 			}

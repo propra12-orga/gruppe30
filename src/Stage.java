@@ -130,17 +130,23 @@ public class Stage extends JPanel {
 	
 	/**
 	 * Power-Up aufnehmen und entfernen
-	 * @param p Feld-Position
 	 */
-	public void PlayerpickPowerup(Point p) {
-		if (bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'z')) {
-			stageArray[p.x/50][p.y/50] = 0;
+	public void PlayerpickPowerup() {
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player.position.x/50, bomberman.player.position.y/50), 'z')) {
+			stageArray[bomberman.player.position.x/50][bomberman.player.position.y/50] = 0;
 			bomberman.player.maxBombs++;	
 		}
-		if (bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'u')) {
-			stageArray[p.x/50][p.y/50] = 0;
-			Bomb.radius++;
-			
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player2.position.x/50, bomberman.player2.position.y/50), 'z')) {
+			stageArray[bomberman.player2.position.x/50][bomberman.player2.position.y/50] = 0;
+			bomberman.player2.maxBombs++;	
+		}
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player.position.x/50, bomberman.player.position.y/50), 'u')) {
+			stageArray[bomberman.player.position.x/50][bomberman.player.position.y/50] = 0;
+			Bomb.radius1++;
+		}
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player2.position.x/50, bomberman.player2.position.y/50), 'u')) {
+			stageArray[bomberman.player2.position.x/50][bomberman.player2.position.y/50] = 0;
+			Bomb.radius2++;
 		}
 	}
 	

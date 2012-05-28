@@ -233,8 +233,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		stopMusic();
 		stage.repaint();
 		isFinished = true;
-		Bomb.radius = 4;     // setzt Power-ups zurüxk
-		player.maxBombs = 1;   // "
+		Bomb.radius1 = 4;     // setzt Power-ups zurüxk
+		Bomb.radius2 = 4; 	  // "
+		player.maxBombs = 1;  // "
+		player2.maxBombs = 1; // "
 		Object[] options = { "1 Player", "2 Players", "Main Menu" };
 		int dialogResult = JOptionPane.showOptionDialog(this, "Noch ein Spiel?", (isFinished)?"Gewonnen!":"Verloren ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if (dialogResult == JOptionPane.YES_OPTION) {
