@@ -93,10 +93,6 @@ public class Stage extends JPanel {
 			if(k == 1) Bombup(p);
 			else if(k == 2) Powerup(p);
 		}
-	}
-	
-	// speziell für Boxen hinter denen das Gate liegt
-	public void destroyBoxGate(Point p){
 		if(isPointOnField(p, BOXGATE)){
 			stageArray[p.x][p.y] = 'g';
 		}

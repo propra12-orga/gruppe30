@@ -50,7 +50,7 @@ public class Bomb {
 						break;
 					}
 					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BOXGATE)){
-						bomberman.stage.destroyBoxGate(new Point(origin.x, origin.y-i));
+						bomberman.stage.destroyBox(new Point(origin.x, origin.y-i));
 						break;
 					}
 				}
@@ -64,7 +64,7 @@ public class Bomb {
 						break;
 					}
 					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BOXGATE)){
-						bomberman.stage.destroyBoxGate(new Point(origin.x, origin.y+i));
+						bomberman.stage.destroyBox(new Point(origin.x, origin.y+i));
 						break;
 					}
 				}
@@ -80,7 +80,7 @@ public class Bomb {
 						break;
 					}
 					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BOXGATE)){
-						bomberman.stage.destroyBoxGate(new Point(origin.x-i, origin.y));
+						bomberman.stage.destroyBox(new Point(origin.x-i, origin.y));
 						break;
 					}
 				}
@@ -94,7 +94,7 @@ public class Bomb {
 						break;
 					}
 					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOXGATE)){
-						bomberman.stage.destroyBoxGate(new Point(origin.x+i, origin.y));
+						bomberman.stage.destroyBox(new Point(origin.x+i, origin.y));
 						break;
 					}
 				}
