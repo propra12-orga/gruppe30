@@ -98,27 +98,49 @@ public class Stage extends JPanel {
 		}
 	}
 	
-	// prüft ob es ein Power-Up gibt
+	/**
+	 * 
+	 * @param p
+	 */
+	public void destroyPU(Point p){
+		if(isPointOnField(p, BOMBUP)){
+			stageArray[p.x][p.y] = 0;
+		}
+		if(isPointOnField(p, POWERUP)){
+			stageArray[p.x][p.y] = 0;
+		}
+	}
+	
+	/*
+	 * prüft ob es ein Power-Up gibt
+	 */
+	
 	public boolean  Chance() {
 		int i = (int)(Math.random()*10);
-		if(i > 8) return true;
+		if(i > 7) return true;
 		else return false;
 	}
 	
-	// prüft welches Power-Up es gibt
-	public int Choose() {
+	/*
+	 *  prüft welches Power-Up es gibt
+	 */
+	 public int Choose() {
 		int j = (int)(Math.random()*10);
-		if(j <= 4) return 1;
+		if(j <= 6) return 1;
 		else return 2;
 	}
 	
-	// Bombe +1
+	/*
+	 *  Bombe +1
+	 */
 	public void Bombup(Point p) {
 		k = 0;
 		stageArray[p.x][p.y] = 'z';
 	}
 	
-	// Radius +1
+	/*
+	 *  Radius +1
+	 */
 	public void Powerup(Point p) {
 		k = 0;
 		stageArray[p.x][p.y] = 'u';
@@ -179,9 +201,11 @@ public class Stage extends JPanel {
 						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
 						break;
 					case Stage.BOMBUP:
+						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
 						g.drawImage(bomberman.imageMap.get("bup"), x * 50, y * 50, 50, 50, this);
 						break;
 					case Stage.POWERUP:
+						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
 						g.drawImage(bomberman.imageMap.get("pup"), x * 50, y * 50, 50, 50, this);
 						break;
 					default:

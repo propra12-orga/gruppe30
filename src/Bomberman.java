@@ -16,10 +16,9 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-
-import javax.swing.JFrame;
 
 public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -31,7 +30,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	Player player;
 	List<Bomb> bombList;
 	Player player2;
-	Enemy enemy;
 	Timer timer;
 	List<Integer> keyCodes;
 	List<Integer> keyReleasedCodes;
@@ -42,7 +40,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	public Bomberman() {
 		setTitle("Bomberman");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
 		
 		setJMenuBar(new MenuBar(this));
 		
@@ -68,10 +65,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		for (int i = 0; i < 8; i++)
 			bombList.add(new Bomb(this));
 		
-		// 25ms Timer hinzufügen
-		timer = new Timer(25, this);
-		timer.start();
-		
 		// Sequencer für Hintergrundmusik
 		try {
 			backgroundSequencer = MidiSystem.getSequencer();
@@ -87,7 +80,9 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		
 		addKeyListener(this);
 		
-		
+		// 25ms Timer hinzufügen
+		timer = new Timer(25, this);
+		timer.start();
 	}
 	
 	/**
@@ -117,8 +112,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		imageMap.put("explosion", getToolkit().getImage(getClass().getClassLoader().getResource("res/b2.png")));
 		imageMap.put("gate", getToolkit().getImage(getClass().getClassLoader().getResource("res/Gate2.png")));
 		imageMap.put("box", getToolkit().getImage(getClass().getClassLoader().getResource("res/box.jpg")));
-		imageMap.put("bup", getToolkit().getImage(getClass().getClassLoader().getResource("res/bup.jpg")));
-		imageMap.put("pup", getToolkit().getImage(getClass().getClassLoader().getResource("res/pup.jpg")));
+		imageMap.put("bup", getToolkit().getImage(getClass().getClassLoader().getResource("res/bup.png")));
+		imageMap.put("pup", getToolkit().getImage(getClass().getClassLoader().getResource("res/pup.png")));
 		
 		// Bilder vorladen
 		MediaTracker mTracker = new MediaTracker(this);
@@ -202,7 +197,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	public void startGame(int playerCount) {		
 		if(music) playMusic(musicMap.get("game"));
 		else stopMusic();
-		//enemy.exists = true;
 		isFinished = false;
 		isRunning = true;
 		player.setActiveBombs(0);
@@ -213,6 +207,11 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		if(playerCount == 2){
 		player2.isDead = false;
 		}
+		
+		Bomb.radius1 = 4;     // setzt Power-ups zurüxk
+		Bomb.radius2 = 4; 	  // "
+		player.maxBombs = 1;  // "
+		player2.maxBombs = 1; // "
 		
 		for (Bomb bomb : bombList) {
 			bomb.isVisible = false;
@@ -228,17 +227,14 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 * Beendet das Spiel
 	 */
 	public void endGame() {
-		keyCodes.clear();
-		keyReleasedCodes.clear();
-		stopMusic();
-		stage.repaint();
 		isFinished = true;
+		stopMusic();
 		Bomb.radius1 = 4;     // setzt Power-ups zurüxk
 		Bomb.radius2 = 4; 	  // "
 		player.maxBombs = 1;  // "
 		player2.maxBombs = 1; // "
 		Object[] options = { "1 Player", "2 Players", "Main Menu" };
-		int dialogResult = JOptionPane.showOptionDialog(this, "Noch ein Spiel?", (isFinished)?"Gewonnen!":"Verloren ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		int dialogResult = JOptionPane.showOptionDialog(this, "Noch ein Spiel?", (stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE))?"Gewonnen!":"Verloren ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if (dialogResult == JOptionPane.YES_OPTION) {
 			startGame(1);
 		}
@@ -246,8 +242,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			startGame(2);
 		}
 		else {
+			
 			showStartScreen();
 		}
+		stage.repaint();
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -302,9 +300,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == timer && isRunning && !isFinished) {
 			// Wenn das Gate erreicht wurde
-			if (stage.isPointOnField(player.getStagePosition(), Stage.GATE)) {
+			if (stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE)) {
 				endGame();
 			}
+			
 			// Alle Bomben prüfen
 			for (Bomb bomb : bombList) {
 				bomb.process();
@@ -332,6 +331,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 					}
 				}
 			}
+			
 			if (hasReleased(KeyEvent.VK_B)) {
 				/// Bombe legen
 				

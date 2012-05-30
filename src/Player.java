@@ -101,10 +101,12 @@ public class Player {
 		if (bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'a') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, p.y / 50), 'a') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, (p.y + 49) / 50), 'a') ||
-			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'a') || bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'b') ||
+			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'a') || 
+			bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'b') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, p.y / 50), 'b') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, (p.y + 49) / 50), 'b') ||
-			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'b') || bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'x') ||
+			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'b') || 
+			bomberman.stage.isPointOnField(new Point(p.x / 50, p.y / 50), 'x') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, p.y / 50), 'x') ||
 			bomberman.stage.isPointOnField(new Point((p.x + 49) / 50, (p.y + 49) / 50), 'x') ||
 			bomberman.stage.isPointOnField(new Point(p.x / 50, (p.y + 49) / 50), 'x'))

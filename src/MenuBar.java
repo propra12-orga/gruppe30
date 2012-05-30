@@ -20,6 +20,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JMenu game;
 	JMenuItem newGame;
 	JMenuItem newGame2;
+	JMenuItem menu;
 	JMenuItem exit;
 	JMenu options;
 	JMenuItem musicon;
@@ -45,6 +46,13 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		
 		game.add(new JSeparator());
 		
+		menu = new JMenuItem("Main Menu");
+		menu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK));
+		menu.addActionListener(this);
+		game.add(menu);
+		
+		game.add(new JSeparator());
+		
 		exit = new JMenuItem("Exit");
 		exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
 		exit.addActionListener(this);
@@ -63,6 +71,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		musicoff.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK));
 		musicoff.addActionListener(this);
 		options.add(musicoff);
+		
+		options.add(new JSeparator());
 		
 		soundon = new JMenuItem("Sound on");
 		soundon.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Event.CTRL_MASK));
@@ -95,6 +105,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		else if (e.getSource() == newGame2) {
 			// Neues Spiel starten
 			bomberman.startGame(2);
+		}
+		else if (e.getSource() == menu) {
+			// Programm beenden
+			bomberman.showStartScreen();
+			bomberman.stage.repaint();
 		}
 		else if (e.getSource() == exit) {
 			// Programm beenden
