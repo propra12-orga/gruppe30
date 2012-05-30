@@ -111,7 +111,7 @@ public class Stage extends JPanel {
 		}
 	}
 	
-	/*
+	/**
 	 * prüft ob es ein Power-Up gibt
 	 */
 	
@@ -121,7 +121,7 @@ public class Stage extends JPanel {
 		else return false;
 	}
 	
-	/*
+	/**
 	 *  prüft welches Power-Up es gibt
 	 */
 	 public int Choose() {
@@ -130,7 +130,7 @@ public class Stage extends JPanel {
 		else return 2;
 	}
 	
-	/*
+	/**
 	 *  Bombe +1
 	 */
 	public void Bombup(Point p) {
@@ -138,7 +138,7 @@ public class Stage extends JPanel {
 		stageArray[p.x][p.y] = 'z';
 	}
 	
-	/*
+	/**
 	 *  Radius +1
 	 */
 	public void Powerup(Point p) {

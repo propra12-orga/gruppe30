@@ -234,7 +234,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		player.maxBombs = 1;  // "
 		player2.maxBombs = 1; // "
 		Object[] options = { "1 Player", "2 Players", "Main Menu" };
-		int dialogResult = JOptionPane.showOptionDialog(this, "Noch ein Spiel?", (stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE))?"Gewonnen!":"Verloren ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		int dialogResult = JOptionPane.showOptionDialog(this, "New game?", (stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE))?"Victory!":"Defeat ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if (dialogResult == JOptionPane.YES_OPTION) {
 			startGame(1);
 		}

@@ -39,7 +39,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		newGame.addActionListener(this);
 		game.add(newGame);
 		
-		newGame2 = new JMenuItem("2 Spieler");
+		newGame2 = new JMenuItem("2 Players");
 		newGame2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Event.CTRL_MASK));
 		newGame2.addActionListener(this);
 		game.add(newGame2);
