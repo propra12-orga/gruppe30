@@ -38,6 +38,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	Map<String, Image> imageMap;
 	Map<String, URL> musicMap;
 	Map<String, URL> soundMap;
+	int level = 1;
+	
 	public Bomberman() {
 		setTitle("Bomberman");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -198,8 +200,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	/**
 	 * Startet das Spiel
 	 * @param mit wie vielen spielern das spiel gestartet wird(max 2 im moment)
+	 * @param welches level soll gestartet werden
 	 */
-	public void startGame(int playerCount) {
+	public void startGame(int playerCount, int level) {
+		this.level = level;
 		this.playerCount = playerCount;
 		if(music) playMusic(musicMap.get("game"));
 		else stopMusic();
@@ -227,15 +231,16 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		keyCodes.clear();
 		keyReleasedCodes.clear();
 		
-		stage.loadStage("res/level02x.txt");
+		stage.loadStage("levels/" + level);
 		
 		stage.repaint();
 	}
 	
 	/**
 	 * Beendet das Spiel
+	 * @param playerID des Spielers der gewonnen hat
 	 */
-	public void endGame() {
+	public void endGame(int winner) {
 		isFinished = true;
 		if(stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE)){
 		playMusic(musicMap.get("win"));
@@ -244,14 +249,33 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		Bomb.radius2 = 4; 	  // "
 		player.maxBombs = 1;  // "
 		player2.maxBombs = 1; // "
-		Object[] options = { "1 Player", "2 Players", "Main Menu" };
-		int dialogResult = JOptionPane.showOptionDialog(this, "New game?", (stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE))?"Victory!":"Defeat ...", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		Object[] options = { "Next level?", "Level Selection", "Main Menu" };
+		int dialogResult = JOptionPane.showOptionDialog(this, "New game?",(playerCount == 1)? (stage.isPointOnField(player.getStagePosition(), Stage.GATE) ? "Victory!" : "Defeat!")  :"Player " + winner + " wins!" , JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+		//nextlevel
 		if (dialogResult == JOptionPane.YES_OPTION) {
-			startGame(1);
+			if(level < 2){
+				level++;
+				startGame(playerCount,level);
+			}
+			else{
+				showStartScreen();
+			
+			}
 		}
+		//level Selection
 		else if (dialogResult == JOptionPane.NO_OPTION) {
-			startGame(2);
+			Object[] levels = { "Level 1", "Level 2", "Level 3", "Level 4"};
+			// levelselection popup
+			String levelSelection = (String) JOptionPane.showInputDialog(this, "Level Selectio", "Choose level!", JOptionPane.PLAIN_MESSAGE, null, levels, levels[0]);
+			for(int i = 0; i <levels.length; i++){			// Dateiname anhand des ausgewählten levels wird bestimmt
+				if(levels[i].equals(levelSelection)){
+					level = i+1;
+					break;
+				}
+			}
+			startGame(playerCount, level);
 		}
+		// main menu
 		else {
 			
 			showStartScreen();
@@ -259,6 +283,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		stage.repaint();
 	}
 	
+	
+
 	public void keyPressed(KeyEvent e) {
 		Integer key = new Integer(e.getKeyCode());
 		if (!keyCodes.contains(key))
@@ -311,9 +337,14 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == timer && isRunning && !isFinished) {
 			// Wenn das Gate erreicht wurde
-			if (stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE)) {
-				endGame();
+			if(playerCount == 1){
+			if (stage.isPointOnField(player.getStagePosition(), Stage.GATE)) {
+				endGame(1);
 			}
+			}
+			/*else if(stage.isPointOnField(player2.getStagePosition(), Stage.GATE)) {
+				endGame(2);
+			}*/
 			
 			
 			
@@ -327,7 +358,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 						if (player.getStagePosition().equals(p)) {
 							player.isDead = true;
 							playSound(soundMap.get("scream"));
-							endGame();
+							endGame(1);
 							break;
 
 						}
@@ -336,17 +367,18 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 						if(playerCount == 2){
 							if (player.getStagePosition().equals(p) && !player.isDead) {
 								player.isDead = true;
+								endGame(2);
+								level++;
 								playSound(soundMap.get("scream"));
 							}
 							if (player2.getStagePosition().equals(p) && !player2.isDead) {
 								player2.isDead = true;
+								endGame(1);
+								level++;
 								playSound(soundMap.get("scream"));
 							}
 
-							if(player.isDead && player2.isDead){
-							endGame();
-							break;
-							}
+							
 						}
 						// Kettenreaktion der bomben
 						for (Bomb bomb2 : bombList) {

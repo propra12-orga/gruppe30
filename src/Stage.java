@@ -118,7 +118,7 @@ public class Stage extends JPanel {
 	 */
 	
 	public boolean  Chance() {
-		int i = (int)(Math.random()*10);
+		int i = (int)(Math.random()*50);
 		if(i > 7) return true;
 		else return false;
 	}
@@ -193,8 +193,11 @@ public class Stage extends JPanel {
 						g.drawImage(bomberman.imageMap.get("block"), x * 50, y * 50, 50, 50, this);
 						break;
 					case Stage.GATE:
-						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
-						g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
+						
+							g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
+						if(bomberman.playerCount == 1 ){
+							g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
+						}
 						break;
 					case Stage.BOX:
 						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
@@ -248,7 +251,7 @@ public class Stage extends JPanel {
 				g.drawString("Player 1", 5, 625);
 				g.drawString("Bombs: " + p1 + ", Radius: " + r1, 5, 645);
 				}
-			
+			// Anzeige in den Ecken
 			if(bomberman.playerCount == 2){
 			p1 = (bomberman.player.maxBombs);
 			p2 = (bomberman.player2.maxBombs);
@@ -258,17 +261,25 @@ public class Stage extends JPanel {
 			g.setFont(font);
 			if(!bomberman.player.isDead){
 			g.setColor(Color.GREEN);
-			g.drawString("Player 1", 5, 625);
-			g.drawString("Bombs: " + p1 + ", Radius: " + r1, 5, 645);
+			//g.drawString("Player 1", 5, 625);
+			g.drawImage(bomberman.imageMap.get("player_right"),5, 600, 40, 40 ,null);
+			g.drawImage(bomberman.imageMap.get("bomb"),50, 620, 25, 25 ,null);
+			g.drawString("x" + p1, 55, 620);
+			g.drawImage(bomberman.imageMap.get("explosion"),75, 620, 25, 25 ,null);
+			g.drawString("" + r1, 83, 620);
 			}else {
 				g.setColor(Color.RED);
 				g.drawString("Player 1 is Dead", 5, 625);
 				}
+			
 
 			if(!bomberman.player2.isDead){
 			g.setColor(Color.CYAN);
-			g.drawString("Player 2", 690, 625);
-			g.drawString("Bombs: " + p2 + ", Radius: " + r2, 690, 645);
+			g.drawImage(bomberman.imageMap.get("player2_left"),805, 600, 40, 40 ,null);
+			g.drawImage(bomberman.imageMap.get("bomb"),770, 620, 25, 25 ,null);
+			g.drawString("x" + p2, 775, 620);
+			g.drawImage(bomberman.imageMap.get("explosion"),745, 620, 25, 25 ,null);
+			g.drawString("" + r2, 753, 620);
 			}else {
 				g.setColor(Color.RED);
 				g.drawString("Player 2 is Dead", 690, 625);
