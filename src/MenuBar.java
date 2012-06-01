@@ -28,6 +28,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JMenuItem soundon;
 	JMenuItem soundoff;
 	JMenu about;
+	JMenu icons;
 	JMenuItem gruppe30;
 	public MenuBar(Bomberman bomberman) {
 		this.bomberman = bomberman;
@@ -88,7 +89,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		
 		about = new JMenu("About");
 		
-		gruppe30 = new JMenuItem("Gruppe30");
+		gruppe30 = new JMenuItem("Information");
 		gruppe30.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Event.CTRL_MASK));
 		gruppe30.addActionListener(this);
 		about.add(gruppe30);
@@ -141,7 +142,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 					+ "Pavel Kopylov\n"
 					+ "Markus Schirmer\n"
 					+ "Marc Neveling\n"
-					+ "Sebastian Kreuﬂ\n";
+					+ "Sebastian Kreuﬂ\n\n"
+					+ "Monsters: http://blog.spoongraphics.co.uk  \n\n";
 			JOptionPane.showMessageDialog(bomberman, message, "About Gruppe30", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

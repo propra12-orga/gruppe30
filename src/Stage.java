@@ -1,4 +1,6 @@
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -21,7 +23,7 @@ public class Stage extends JPanel {
 	public static final char BOXGATE = 'x';
 	public static final char BOMBUP = 'z';
 	public static final char POWERUP = 'u';
-	int k;
+	int k, p1, p2, r1, r2;
 	
 	Bomberman bomberman;
 	private char[][] stageArray;
@@ -150,19 +152,19 @@ public class Stage extends JPanel {
 	 * Power-Up aufnehmen und entfernen
 	 */
 	public void PlayerpickPowerup() {
-		if (bomberman.stage.isPointOnField(new Point(bomberman.player.position.x/50, bomberman.player.position.y/50), 'z')) {
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player.position.x/50, bomberman.player.position.y/50), 'z') && !bomberman.player.isDead) {
 			stageArray[bomberman.player.position.x/50][bomberman.player.position.y/50] = 0;
 			bomberman.player.maxBombs++;	
 		}
-		if (bomberman.stage.isPointOnField(new Point(bomberman.player2.position.x/50, bomberman.player2.position.y/50), 'z')) {
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player2.position.x/50, bomberman.player2.position.y/50), 'z') && !bomberman.player2.isDead) {
 			stageArray[bomberman.player2.position.x/50][bomberman.player2.position.y/50] = 0;
 			bomberman.player2.maxBombs++;	
 		}
-		if (bomberman.stage.isPointOnField(new Point(bomberman.player.position.x/50, bomberman.player.position.y/50), 'u')) {
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player.position.x/50, bomberman.player.position.y/50), 'u') && !bomberman.player.isDead) {
 			stageArray[bomberman.player.position.x/50][bomberman.player.position.y/50] = 0;
 			Bomb.radius1++;
 		}
-		if (bomberman.stage.isPointOnField(new Point(bomberman.player2.position.x/50, bomberman.player2.position.y/50), 'u')) {
+		if (bomberman.stage.isPointOnField(new Point(bomberman.player2.position.x/50, bomberman.player2.position.y/50), 'u') && !bomberman.player2.isDead) {
 			stageArray[bomberman.player2.position.x/50][bomberman.player2.position.y/50] = 0;
 			Bomb.radius2++;
 		}
@@ -202,11 +204,11 @@ public class Stage extends JPanel {
 						break;
 					case Stage.BOMBUP:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
-						g.drawImage(bomberman.imageMap.get("bup"), x * 50, y * 50, 50, 50, this);
+						g.drawImage(bomberman.imageMap.get("bup"), x * 50, y * 50, 40, 40, this);
 						break;
 					case Stage.POWERUP:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
-						g.drawImage(bomberman.imageMap.get("pup"), x * 50, y * 50, 50, 50, this);
+						g.drawImage(bomberman.imageMap.get("pup"), x * 50, y * 50, 40, 40, this);
 						break;
 					default:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
@@ -237,7 +239,43 @@ public class Stage extends JPanel {
 					}
 				}
 			}
+			if(bomberman.playerCount == 1){
+				int p1 = (bomberman.player.maxBombs);
+				int r1 = (Bomb.radius1);
+				g.setColor(Color.GREEN);
+				Font font = new Font("Arial", Font.BOLD, 15);
+				g.setFont(font);
+				g.drawString("Player 1", 5, 625);
+				g.drawString("Bombs: " + p1 + ", Radius: " + r1, 5, 645);
+				}
+			
+			if(bomberman.playerCount == 2){
+			p1 = (bomberman.player.maxBombs);
+			p2 = (bomberman.player2.maxBombs);
+			r1 = (Bomb.radius1);
+			r2 = (Bomb.radius2);
+			Font font = new Font("Arial", Font.BOLD, 15);
+			g.setFont(font);
+			if(!bomberman.player.isDead){
+			g.setColor(Color.GREEN);
+			g.drawString("Player 1", 5, 625);
+			g.drawString("Bombs: " + p1 + ", Radius: " + r1, 5, 645);
+			}else {
+				g.setColor(Color.RED);
+				g.drawString("Player 1 is Dead", 5, 625);
+				}
+
+			if(!bomberman.player2.isDead){
+			g.setColor(Color.CYAN);
+			g.drawString("Player 2", 690, 625);
+			g.drawString("Bombs: " + p2 + ", Radius: " + r2, 690, 645);
+			}else {
+				g.setColor(Color.RED);
+				g.drawString("Player 2 is Dead", 690, 625);
+				}
+			}
 		}
+
 		
 		g.dispose();
 		

@@ -26,6 +26,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	boolean isFinished;
 	boolean music = true;
 	boolean sound = true;
+	int playerCount;
 	Stage stage;
 	Player player;
 	List<Bomb> bombList;
@@ -102,15 +103,15 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		imageMap = new HashMap<String, Image>();
 
 		imageMap.put("start", getToolkit().getImage(getClass().getClassLoader().getResource("res/Bom.jpg")));
-		imageMap.put("block", getToolkit().getImage(getClass().getClassLoader().getResource("res/block.jpg")));
+		imageMap.put("block", getToolkit().getImage(getClass().getClassLoader().getResource("res/block.png")));
 		imageMap.put("floor", getToolkit().getImage(getClass().getClassLoader().getResource("res/Level.jpg")));
-		imageMap.put("player_left", getToolkit().getImage(getClass().getClassLoader().getResource("res/m2.jpg")));
-		imageMap.put("player_right", getToolkit().getImage(getClass().getClassLoader().getResource("res/m1.jpg")));
-		imageMap.put("player2_left", getToolkit().getImage(getClass().getClassLoader().getResource("res/m21.png")));
-		imageMap.put("player2_right", getToolkit().getImage(getClass().getClassLoader().getResource("res/m11.png")));
-		imageMap.put("bomb", getToolkit().getImage(getClass().getClassLoader().getResource("res/bomb.png")));
-		imageMap.put("explosion", getToolkit().getImage(getClass().getClassLoader().getResource("res/b2.png")));
-		imageMap.put("gate", getToolkit().getImage(getClass().getClassLoader().getResource("res/Gate2.png")));
+		imageMap.put("player_left", getToolkit().getImage(getClass().getClassLoader().getResource("res/Green-Monster2.png")));
+		imageMap.put("player_right", getToolkit().getImage(getClass().getClassLoader().getResource("res/Green-Monster.png")));
+		imageMap.put("player2_left", getToolkit().getImage(getClass().getClassLoader().getResource("res/Blue-Monster2.png")));
+		imageMap.put("player2_right", getToolkit().getImage(getClass().getClassLoader().getResource("res/Blue-Monster.png")));
+		imageMap.put("bomb", getToolkit().getImage(getClass().getClassLoader().getResource("res/bomb2.png")));
+		imageMap.put("explosion", getToolkit().getImage(getClass().getClassLoader().getResource("res/expl.png")));
+		imageMap.put("gate", getToolkit().getImage(getClass().getClassLoader().getResource("res/gate.png")));
 		imageMap.put("box", getToolkit().getImage(getClass().getClassLoader().getResource("res/box.jpg")));
 		imageMap.put("bup", getToolkit().getImage(getClass().getClassLoader().getResource("res/bup.png")));
 		imageMap.put("pup", getToolkit().getImage(getClass().getClassLoader().getResource("res/pup.png")));
@@ -135,8 +136,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		musicMap = new HashMap<String, URL>();
 		
 		try {
-			musicMap.put("start", getClass().getClassLoader().getResource("res/play3.mid"));
-			musicMap.put("game", getClass().getClassLoader().getResource("res/play2.mid"));
+			musicMap.put("start", getClass().getClassLoader().getResource("res/menu.mid"));
+			musicMap.put("defeat", getClass().getClassLoader().getResource("res/defeat.mid"));
+			musicMap.put("game", getClass().getClassLoader().getResource("res/game.mid"));
+			musicMap.put("win", getClass().getClassLoader().getResource("res/win.mid"));
 		}
 		catch (Exception ex) {}
 	}
@@ -150,6 +153,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		try {			
 			soundMap.put("bomb", getClass().getClassLoader().getResource("res/bomb.wav"));
 			soundMap.put("ticktock", getClass().getClassLoader().getResource("res/ticktock.wav"));
+			soundMap.put("scream", getClass().getClassLoader().getResource("res/scream.wav"));
+			soundMap.put("laugh", getClass().getClassLoader().getResource("res/laugh.wav"));
 		}
 		catch (Exception ex) {}
 	}
@@ -194,7 +199,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 * Startet das Spiel
 	 * @param mit wie vielen spielern das spiel gestartet wird(max 2 im moment)
 	 */
-	public void startGame(int playerCount) {		
+	public void startGame(int playerCount) {
+		this.playerCount = playerCount;
 		if(music) playMusic(musicMap.get("game"));
 		else stopMusic();
 		isFinished = false;
@@ -218,6 +224,9 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			bomb.isExploded = false;
 		}
 		
+		keyCodes.clear();
+		keyReleasedCodes.clear();
+		
 		stage.loadStage("res/level02x.txt");
 		
 		stage.repaint();
@@ -228,7 +237,9 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 */
 	public void endGame() {
 		isFinished = true;
-		stopMusic();
+		if(stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE)){
+		playMusic(musicMap.get("win"));
+		}else playMusic(musicMap.get("defeat"));
 		Bomb.radius1 = 4;     // setzt Power-ups zurüxk
 		Bomb.radius2 = 4; 	  // "
 		player.maxBombs = 1;  // "
@@ -304,23 +315,39 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 				endGame();
 			}
 			
+			
+			
 			// Alle Bomben prüfen
 			for (Bomb bomb : bombList) {
 				bomb.process();
 				if (bomb.isVisible && bomb.isExploded) {
 					for (Point p : bomb.explosionArray) {
 						// Wenn der Spieler in der Explosion ist
+						if(playerCount == 1){
 						if (player.getStagePosition().equals(p)) {
 							player.isDead = true;
+							playSound(soundMap.get("scream"));
 							endGame();
 							break;
 
-						}else if (player2.getStagePosition().equals(p) && !player2.isDead) {
-								player2.isDead = true;
-								endGame();
-								break;
 						}
 						
+						}
+						if(playerCount == 2){
+							if (player.getStagePosition().equals(p) && !player.isDead) {
+								player.isDead = true;
+								playSound(soundMap.get("scream"));
+							}
+							if (player2.getStagePosition().equals(p) && !player2.isDead) {
+								player2.isDead = true;
+								playSound(soundMap.get("scream"));
+							}
+
+							if(player.isDead && player2.isDead){
+							endGame();
+							break;
+							}
+						}
 						// Kettenreaktion der bomben
 						for (Bomb bomb2 : bombList) {
 							if(bomb2.isVisible && !bomb2.isExploded && p.equals(bomb2.position)){
@@ -332,9 +359,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 				}
 			}
 			
-			if (hasReleased(KeyEvent.VK_B)) {
+			if (hasReleased(KeyEvent.VK_B) && !player.isDead) {
 				/// Bombe legen
-				
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player.getActiveBombs() < player.maxBombs && bomb.canLayOn(player.getStagePosition())) {
 							bomb.setToPlayerPos();
@@ -346,9 +372,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 				
 			}
 			
-			if (hasReleased(KeyEvent.VK_L)) {
+			if (hasReleased(KeyEvent.VK_L) && !player2.isDead) {
 				/// Bombe legen
-				if(player2.isDead == false) {
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player2.getActiveBombs() < player2.maxBombs && bomb.canLayOn(player2.getStagePosition())) {
 							bomb.setToPlayer2Pos();
@@ -398,7 +423,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			stage.repaint();
 		}
 		
-	}
 	
 	public static void main(String args[]) {
 		new Bomberman();
