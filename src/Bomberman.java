@@ -387,38 +387,38 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			/*
 			 *  Spieler Steuerung
 			 */
-			
-			if (isPressing(KeyEvent.VK_A)) {
-				player.moveLeft();
+			if(!player.isDead){
+				if (isPressing(KeyEvent.VK_A)) {
+					player.moveLeft();
+				}
+				if (isPressing(KeyEvent.VK_D)) {
+					player.moveRight();
+				}
+				if (isPressing(KeyEvent.VK_W)) {
+					player.moveUp();
+				}
+				if (isPressing(KeyEvent.VK_S)) {
+					player.moveDown();
+				}
 			}
-			if (isPressing(KeyEvent.VK_D)) {
-				player.moveRight();
-			}
-			if (isPressing(KeyEvent.VK_W)) {
-				player.moveUp();
-			}
-			if (isPressing(KeyEvent.VK_S)) {
-				player.moveDown();
-			}
-			
 			//player 2
 			
 				
-
-			if (isPressing(KeyEvent.VK_LEFT)) {
-				player2.moveLeft();
+			if(!player2.isDead){
+				if (isPressing(KeyEvent.VK_LEFT)) {
+					player2.moveLeft();
+				}
+				if (isPressing(KeyEvent.VK_RIGHT)) {
+					player2.moveRight();
+				}
+				if (isPressing(KeyEvent.VK_UP)) {
+					player2.moveUp();
+				}
+				if (isPressing(KeyEvent.VK_DOWN)) {
+					player2.moveDown();
+					
+				}
 			}
-			if (isPressing(KeyEvent.VK_RIGHT)) {
-				player2.moveRight();
-			}
-			if (isPressing(KeyEvent.VK_UP)) {
-				player2.moveUp();
-			}
-			if (isPressing(KeyEvent.VK_DOWN)) {
-				player2.moveDown();
-				
-			}
-			
 			// Feld neu zeichnen
 			stage.repaint();
 		}
