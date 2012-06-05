@@ -26,7 +26,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	boolean isFinished;
 	boolean music = true;
 	boolean sound = true;
-	int playerCount;
+	int playerCount, player1win = 0, player2win = 0, Continue;
 	Stage stage;
 	Player player;
 	List<Bomb> bombList;
@@ -39,9 +39,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	Map<String, URL> musicMap;
 	Map<String, URL> soundMap;
 	int level = 1;
+	int timeout;
 	
 	public Bomberman() {
-		setTitle("Bomberman");
+		setTitle("MONSTERS");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		setJMenuBar(new MenuBar(this));
@@ -105,6 +106,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		imageMap = new HashMap<String, Image>();
 
 		imageMap.put("start", getToolkit().getImage(getClass().getClassLoader().getResource("res/Bom.jpg")));
+		imageMap.put("board", getToolkit().getImage(getClass().getClassLoader().getResource("res/board.jpg")));
 		imageMap.put("block", getToolkit().getImage(getClass().getClassLoader().getResource("res/block.png")));
 		imageMap.put("floor", getToolkit().getImage(getClass().getClassLoader().getResource("res/Level.jpg")));
 		imageMap.put("player_left", getToolkit().getImage(getClass().getClassLoader().getResource("res/Green-Monster2.png")));
@@ -117,7 +119,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		imageMap.put("box", getToolkit().getImage(getClass().getClassLoader().getResource("res/box.jpg")));
 		imageMap.put("bup", getToolkit().getImage(getClass().getClassLoader().getResource("res/bup.png")));
 		imageMap.put("pup", getToolkit().getImage(getClass().getClassLoader().getResource("res/pup.png")));
-		
+
 		// Bilder vorladen
 		MediaTracker mTracker = new MediaTracker(this);
 		int i = 0;
@@ -211,7 +213,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		isRunning = true;
 		player.setActiveBombs(0);
 		player2.setActiveBombs(0);
-		
 		player.isDead = false;
 		player2.isDead = true;
 		if(playerCount == 2){
@@ -241,45 +242,103 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 * @param playerID des Spielers der gewonnen hat
 	 */
 	public void endGame(int winner) {
-		isFinished = true;
-		if(stage.isPointOnField(player.getStagePosition(), Stage.GATE) || stage.isPointOnField(player2.getStagePosition(), Stage.GATE)){
+		isFinished = true;	
+		if(playerCount == 1){
+		if(stage.isPointOnField(player.getStagePosition(), Stage.GATE)){
 		playMusic(musicMap.get("win"));
 		}else playMusic(musicMap.get("defeat"));
+		}
+		if(playerCount == 2){
+			playMusic(musicMap.get("win"));
+		}
 		Bomb.radius1 = 4;     // setzt Power-ups zurüxk
 		Bomb.radius2 = 4; 	  // "
 		player.maxBombs = 1;  // "
 		player2.maxBombs = 1; // "
-		Object[] options = { "Next level?", "Level Selection", "Main Menu" };
-		int dialogResult = JOptionPane.showOptionDialog(this, "New game?",(playerCount == 1)? (stage.isPointOnField(player.getStagePosition(), Stage.GATE) ? "Victory!" : "Defeat!")  :"Player " + winner + " wins!" , JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-		//nextlevel
+		if(playerCount == 2){
+		Object[] options = { "Yes!", "No" };
+		int dialogResult = JOptionPane.showOptionDialog(this, "Continue?", "Player " + winner + " wins!" , JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		if (dialogResult == JOptionPane.YES_OPTION) {
-			if(level < 2){
+			if(level < 5){
 				level++;
+				playSound(soundMap.get("laugh"));
 				startGame(playerCount,level);
 			}
 			else{
+				
+				if(player1win == player2win){
+					JOptionPane.showMessageDialog(this, player1win + " to " + player2win + " ...", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+				}
+					
+				else if(player1win > player2win){
+					level++;
+					JOptionPane.showMessageDialog(this, "Player 2, you lose! Player 1 won the game: " + player1win + " to " + player2win, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else{
+					level++;
+					JOptionPane.showMessageDialog(this, "Player 1, you lose! Player 2 won the game: "  + player2win + " to " + player1win, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+					}
+				player1win = 0;
+				player2win = 0;
 				showStartScreen();
 			
 			}
 		}
-		//level Selection
-		else if (dialogResult == JOptionPane.NO_OPTION) {
-			Object[] levels = { "Level 1", "Level 2", "Level 3", "Level 4"};
-			// levelselection popup
-			String levelSelection = (String) JOptionPane.showInputDialog(this, "Level Selectio", "Choose level!", JOptionPane.PLAIN_MESSAGE, null, levels, levels[0]);
-			for(int i = 0; i <levels.length; i++){			// Dateiname anhand des ausgewählten levels wird bestimmt
-				if(levels[i].equals(levelSelection)){
-					level = i+1;
-					break;
+		/*else if (dialogResult == JOptionPane.NO_OPTION) {
+			Object[] levels = { "Level 1", "Level 2", "Level 3", "Level 4", "Level 5"};
+			int levelSelect = level;
+			JOptionPane.showInputDialog(this, "Level Selection", "Choose level!",JOptionPane.QUESTION_MESSAGE, null, levels, levelSelect);
+			if(playerCount == 2 && levelSelect < 5){
+				playSound(soundMap.get("laugh"));
 				}
-			}
 			startGame(playerCount, level);
-		}
-		// main menu
+		} */
 		else {
 			
+			if(player1win == player2win){
+				JOptionPane.showMessageDialog(this, player1win + " to " + player2win + " ...", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+			else if(player1win > player2win){
+				level++;
+				JOptionPane.showMessageDialog(this, "Player 2, you lose! Player 1 won the game: " + player1win + " to " + player2win, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else{
+				level++;
+				JOptionPane.showMessageDialog(this, "Player 1, you lose! Player 2 won the game: "  + player2win + " to " + player1win, "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+				}
+			player1win = 0;
+			player2win = 0;
 			showStartScreen();
 		}
+		
+		}
+		if(playerCount == 1){
+			Object[] options = { "Yes!", "No" };
+			int dialogResult = JOptionPane.showOptionDialog(this, "Continue?",stage.isPointOnField(player.getStagePosition(), Stage.GATE)? "Victory!" : "Defeat..", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+			if (dialogResult == JOptionPane.YES_OPTION) {
+				if(level < 5 && Continue > 0){
+					if(!player.isDead){
+					level++;
+					startGame(playerCount,level);
+					}else{
+						startGame(playerCount,level);
+					}
+				}
+				else{
+					if(Continue != 0) {
+					JOptionPane.showMessageDialog(this, "You win!", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+					}else{JOptionPane.showMessageDialog(this, "You lose..", "GAME OVER", JOptionPane.INFORMATION_MESSAGE);}
+					showStartScreen();
+				
+				}
+			}
+			else {
+				showStartScreen();
+			}
+			
+		}
+		
 		stage.repaint();
 	}
 	
@@ -352,11 +411,13 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			for (Bomb bomb : bombList) {
 				bomb.process();
 				if (bomb.isVisible && bomb.isExploded) {
+					
 					for (Point p : bomb.explosionArray) {
 						// Wenn der Spieler in der Explosion ist
 						if(playerCount == 1){
 						if (player.getStagePosition().equals(p)) {
 							player.isDead = true;
+							Continue--;
 							playSound(soundMap.get("scream"));
 							endGame(1);
 							break;
@@ -364,22 +425,25 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 						}
 						
 						}
+						
 						if(playerCount == 2){
-							if (player.getStagePosition().equals(p) && !player.isDead) {
+							if (player.getStagePosition().equals(p) && !player.isDead && !isFinished) {
+								player2win++;
 								player.isDead = true;
+								playSound(soundMap.get("scream"));
 								endGame(2);
-								level++;
-								playSound(soundMap.get("scream"));
+								
+								break;
 							}
-							if (player2.getStagePosition().equals(p) && !player2.isDead) {
+							if (player2.getStagePosition().equals(p) && !player2.isDead && !isFinished) {
+								player1win++;
 								player2.isDead = true;
-								endGame(1);
-								level++;
 								playSound(soundMap.get("scream"));
+								endGame(1);
+								break;
 							}
-
-							
-						}
+							}
+	
 						// Kettenreaktion der bomben
 						for (Bomb bomb2 : bombList) {
 							if(bomb2.isVisible && !bomb2.isExploded && p.equals(bomb2.position)){

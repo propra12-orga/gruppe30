@@ -100,11 +100,14 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == newGame) {
 			// Neues Spiel starten
+			bomberman.Continue = 3;
 			bomberman.startGame(1, 1);
 		}
 		
 		else if (e.getSource() == newGame2) {
 			// Neues Spiel starten
+			bomberman.player1win = 0;
+			bomberman.player2win = 0;
 			bomberman.startGame(2, 1);
 		}
 		else if (e.getSource() == menu) {

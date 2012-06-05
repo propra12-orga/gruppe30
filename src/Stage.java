@@ -23,7 +23,7 @@ public class Stage extends JPanel {
 	public static final char BOXGATE = 'x';
 	public static final char BOMBUP = 'z';
 	public static final char POWERUP = 'u';
-	int k, p1, p2, r1, r2;
+	int k, p1, p2, r1, r2, p1w, p2w, lvl, con;
 	
 	Bomberman bomberman;
 	private char[][] stageArray;
@@ -42,7 +42,7 @@ public class Stage extends JPanel {
 	public void loadStage(String filename) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename)));
-			for (int y = 0; y < 13; y++) {
+			for (int y = 0; y < 12; y++) {
 				String line = in.readLine();
 				for (int x = 0; x < 17; x++) {
 					switch (line.charAt(x)) {
@@ -118,9 +118,15 @@ public class Stage extends JPanel {
 	 */
 	
 	public boolean  Chance() {
-		int i = (int)(Math.random()*50);
-		if(i > 7) return true;
-		else return false;
+		if(bomberman.playerCount == 2) {
+			int i = (int)(Math.random()*30);
+			if(i > 7) return true;
+			else return false;
+		}else {
+			int i = (int)(Math.random()*10);
+			if(i > 7) return true;
+			else return false;
+		}
 	}
 	
 	/**
@@ -128,7 +134,7 @@ public class Stage extends JPanel {
 	 */
 	 public int Choose() {
 		int j = (int)(Math.random()*10);
-		if(j <= 6) return 1;
+		if(j <= 5) return 1;
 		else return 2;
 	}
 	
@@ -185,15 +191,15 @@ public class Stage extends JPanel {
 			g.drawImage(bomberman.imageMap.get("start"), 0, 0, getWidth(), getHeight(), this);
 		}
 		else {
+			g.drawImage(bomberman.imageMap.get("board"), 0, 0, getWidth(), getHeight(), this);
 			// Spielfeld
 			for (int x = 0; x < 17; x++) {
-				for (int y = 0; y < 13; y++) {
+				for (int y = 0; y < 12; y++) {
 					switch (stageArray[x][y]) {
 					case Stage.BLOCK:
 						g.drawImage(bomberman.imageMap.get("block"), x * 50, y * 50, 50, 50, this);
 						break;
 					case Stage.GATE:
-						
 							g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
 						if(bomberman.playerCount == 1 ){
 							g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
@@ -219,6 +225,8 @@ public class Stage extends JPanel {
 				}
 			}
 			
+			
+			
 			// Bomben
 			for (Bomb bomb : bomberman.bombList) {
 				if (bomb.isVisible && !bomb.isExploded) {
@@ -243,13 +251,25 @@ public class Stage extends JPanel {
 				}
 			}
 			if(bomberman.playerCount == 1){
-				int p1 = (bomberman.player.maxBombs);
-				int r1 = (Bomb.radius1);
+				p1 = (bomberman.player.maxBombs);
+				r1 = (Bomb.radius1);
+				lvl = (bomberman.level);
+				con = (bomberman.Continue);
 				g.setColor(Color.GREEN);
 				Font font = new Font("Arial", Font.BOLD, 15);
 				g.setFont(font);
-				g.drawString("Player 1", 5, 625);
-				g.drawString("Bombs: " + p1 + ", Radius: " + r1, 5, 645);
+				g.drawImage(bomberman.imageMap.get("player_right"),5, 595, 40, 40 ,null);
+				g.drawImage(bomberman.imageMap.get("bomb"),50, 615, 25, 25 ,null);
+				g.drawString("x" + p1, 55, 615);
+				g.drawImage(bomberman.imageMap.get("explosion"),75, 615, 25, 25 ,null);
+				g.drawString("" + r1, 83, 615);
+				g.drawString("Continue Left: " + con, 5, 650);
+				
+				g.setColor(Color.WHITE);
+				Font font2 = new Font("Arial", Font.BOLD, 55);
+				g.setFont(font2);
+				g.drawString("Level " + lvl, 357, 645);
+				
 				}
 			// Anzeige in den Ecken
 			if(bomberman.playerCount == 2){
@@ -257,12 +277,25 @@ public class Stage extends JPanel {
 			p2 = (bomberman.player2.maxBombs);
 			r1 = (Bomb.radius1);
 			r2 = (Bomb.radius2);
-			Font font = new Font("Arial", Font.BOLD, 15);
+			p1w = (bomberman.player1win);
+			p2w = (bomberman.player2win);
+			g.setColor(Color.WHITE);
+			Font font = new Font("Arial", Font.BOLD, 55);
 			g.setFont(font);
+			g.drawString(p1w + "|" + p2w, 387, 640);
+			if(p1w > p2w){
+				g.setColor(Color.BLACK);
+				g.drawString("_", 388, 638);
+			}
+			if(p1w < p2w){
+				g.setColor(Color.BLACK);
+				g.drawString("_", 434, 638);
+			}
+			Font font2 = new Font("Arial", Font.BOLD, 15);
+			g.setFont(font2);
 			if(!bomberman.player.isDead){
 			g.setColor(Color.GREEN);
-			//g.drawString("Player 1", 5, 625);
-			g.drawImage(bomberman.imageMap.get("player_right"),5, 600, 40, 40 ,null);
+			g.drawImage(bomberman.imageMap.get("player_right"),5, 605, 40, 40 ,null);
 			g.drawImage(bomberman.imageMap.get("bomb"),50, 620, 25, 25 ,null);
 			g.drawString("x" + p1, 55, 620);
 			g.drawImage(bomberman.imageMap.get("explosion"),75, 620, 25, 25 ,null);
@@ -275,7 +308,7 @@ public class Stage extends JPanel {
 
 			if(!bomberman.player2.isDead){
 			g.setColor(Color.CYAN);
-			g.drawImage(bomberman.imageMap.get("player2_left"),805, 600, 40, 40 ,null);
+			g.drawImage(bomberman.imageMap.get("player2_left"),805, 605, 40, 40 ,null);
 			g.drawImage(bomberman.imageMap.get("bomb"),770, 620, 25, 25 ,null);
 			g.drawString("x" + p2, 775, 620);
 			g.drawImage(bomberman.imageMap.get("explosion"),745, 620, 25, 25 ,null);
