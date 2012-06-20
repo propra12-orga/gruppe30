@@ -218,7 +218,6 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		if(playerCount == 2){
 		player2.isDead = false;
 		}
-		
 		Bomb.radius1 = 4;     // setzt Power-ups zurüxk
 		Bomb.radius2 = 4; 	  // "
 		player.maxBombs = 1;  // "

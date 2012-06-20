@@ -6,6 +6,7 @@ import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -20,6 +21,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JMenu game;
 	JMenuItem newGame;
 	JMenuItem newGame2;
+	JMenuItem save;
+	JMenuItem load;
 	JMenuItem menu;
 	JMenuItem exit;
 	JMenu options;
@@ -44,6 +47,18 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		newGame2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Event.CTRL_MASK));
 		newGame2.addActionListener(this);
 		game.add(newGame2);
+		
+		game.add(new JSeparator());
+		
+		save = new JMenuItem("Save");
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
+		save.addActionListener(this);
+		game.add(save);
+		
+		load = new JMenuItem("Load");
+		load.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Event.CTRL_MASK));
+		load.addActionListener(this);
+		game.add(load);
 		
 		game.add(new JSeparator());
 		
@@ -81,7 +96,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		options.add(soundon);
 		
 		soundoff = new JMenuItem("Sound off");
-		soundoff.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Event.CTRL_MASK));
+		soundoff.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J, Event.CTRL_MASK));
 		soundoff.addActionListener(this);
 		options.add(soundoff);
 		
@@ -109,6 +124,20 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			bomberman.player1win = 0;
 			bomberman.player2win = 0;
 			bomberman.startGame(2, 1);
+		}
+		else if (e.getSource() == save) {
+			// Spiel speichern
+			try {
+				bomberman.stage.save("src/Levels/99");
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		else if (e.getSource() == load) {
+			// Spiel laden
+			bomberman.Continue = 3;
+			bomberman.startGame(1, 99);
 		}
 		else if (e.getSource() == menu) {
 			// Programm beenden

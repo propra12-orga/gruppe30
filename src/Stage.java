@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.io.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Random;
@@ -42,35 +43,63 @@ public class Stage extends JPanel {
 	public void loadStage(String filename) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename)));
-			for (int y = 0; y < 12; y++) {
+			for (int y = 0; y < 14; y++) {
 				String line = in.readLine();
-				for (int x = 0; x < 17; x++) {
-					switch (line.charAt(x)) {
-					case Stage.BLOCK: case Stage.GATE: case Stage.BOX: case Stage.BOXGATE:
-						stageArray[x][y] = line.charAt(x);
-						break;
-					case Stage.PLAYER:
-						bomberman.player.setStagePosition(new Point(x, y));
-						stageArray[x][y] = ' ';
-						break;
-					case Stage.PLAYER2:
-						bomberman.player2.setStagePosition(new Point(x, y));
-						stageArray[x][y] = ' ';
-						break;
-					default:
-						Random rand = new Random();
-						if(rand.nextInt(100) < 50 && !new Point(x,y).equals(new Point(1,2)) &&!new Point(x,y).equals(new Point(2,1))){
-						stageArray[x][y] = 0;  	//////// für zufällig erzeugte Blöcke  ='b' und bs aus Textdatei entfernen
-						}
-						else{
-						stageArray[x][y] = 0;
+				if (y == 12) bomberman.player.maxBombs =  Integer.parseInt(line);
+				else if (y == 13) Bomb.radius1 = Integer.parseInt(line);
+				else if (y < 13){
+					for (int x = 0; x < 17; x++) {
+						switch (line.charAt(x)) {
+						case Stage.BLOCK: case Stage.GATE: case Stage.BOX: case Stage.BOXGATE:
+							stageArray[x][y] = line.charAt(x);
+							break;
+						case Stage.PLAYER:
+							bomberman.player.setStagePosition(new Point(x, y));
+							stageArray[x][y] = ' ';
+							break;
+						case Stage.PLAYER2:
+							bomberman.player2.setStagePosition(new Point(x, y));
+							stageArray[x][y] = ' ';
+							break;
+						default:
+							Random rand = new Random();
+							if(rand.nextInt(100) < 50 && !new Point(x,y).equals(new Point(1,2)) &&!new Point(x,y).equals(new Point(2,1))){
+								stageArray[x][y] = 0;  	//////// für zufällig erzeugte Blöcke  ='b' und bs aus Textdatei entfernen
+							}
+							else{
+								stageArray[x][y] = 0;
 						}
 					}
+				}
 				}
 			}
 			repaint();
 		}
 		catch(Exception ex) {}
+	}
+	
+	/**
+	 * Speichert das Spiel
+	 * @param filename Name der Speicherdatei
+	 */
+	public void save(String filename) throws IOException {
+		File save = new File(filename);
+		FileWriter out = new FileWriter(save);
+		PrintWriter ps = new PrintWriter(out);
+		for (int y = 0; y < 12; y++) {
+			for (int x = 0; x < 17; x++) {
+				if(bomberman.player.position.x/50 == x && bomberman.player.position.y/50 == y) ps.print('p');
+				else {
+					ps.print(stageArray[x][y]);
+					if(x==16) ps.println();
+				}
+			}		
+		}
+		ps.print(bomberman.player.maxBombs);
+		ps.println();
+		ps.print(Bomb.radius1);
+		ps.flush();
+		ps.close();	
 	}
 	
 	/**
