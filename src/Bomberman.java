@@ -26,6 +26,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	boolean isFinished;
 	boolean music = true;
 	boolean sound = true;
+	boolean inLevelEditor;
 	int playerCount, player1win = 0, player2win = 0, Continue;
 	Stage stage;
 	Player player;
@@ -93,6 +94,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 * Zeigt den Startbildschirm an
 	 */
 	public void showStartScreen() {
+		inLevelEditor = false;
 		isRunning = false;
 		stopMusic();
 		if(music)playMusic(musicMap.get("start"));
@@ -205,6 +207,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 * @param welches level soll gestartet werden
 	 */
 	public void startGame(int playerCount, int level) {
+		inLevelEditor = false;
 		this.level = level;
 		this.playerCount = playerCount;
 		if(music) playMusic(musicMap.get("game"));
@@ -341,7 +344,17 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		stage.repaint();
 	}
 	
-	
+	/**
+	 * startet den leveleditor
+	 */
+	public void startEditor(String filename){
+		isRunning = true;
+		inLevelEditor = true;
+		player.isDead = true;
+		player2.isDead = true;
+		stage.loadStage(filename);
+		stage.repaint();
+	}
 
 	public void keyPressed(KeyEvent e) {
 		Integer key = new Integer(e.getKeyCode());
@@ -393,12 +406,12 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 }
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == timer && isRunning && !isFinished) {
+		if (e.getSource() == timer && isRunning && !isFinished && !inLevelEditor) {
 			// Wenn das Gate erreicht wurde
 			if(playerCount == 1){
-			if (stage.isPointOnField(player.getStagePosition(), Stage.GATE)) {
-				endGame(1);
-			}
+				if (stage.isPointOnField(player.getStagePosition(), Stage.GATE)) {
+					endGame(1);
+				}
 			}
 			/*else if(stage.isPointOnField(player2.getStagePosition(), Stage.GATE)) {
 				endGame(2);
@@ -482,7 +495,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			/*
 			 *  Spieler Steuerung
 			 */
-			if(!player.isDead){
+			if(!player.isDead && !inLevelEditor){
 				if (isPressing(KeyEvent.VK_A)) {
 					player.moveLeft();
 				}
@@ -499,7 +512,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			//player 2
 			
 				
-			if(!player2.isDead){
+			if(!player2.isDead && !inLevelEditor){
 				if (isPressing(KeyEvent.VK_LEFT)) {
 					player2.moveLeft();
 				}

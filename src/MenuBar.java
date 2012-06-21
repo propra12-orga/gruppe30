@@ -6,6 +6,7 @@ import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JMenu;
@@ -30,6 +31,9 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JMenuItem musicoff;
 	JMenuItem soundon;
 	JMenuItem soundoff;
+	JMenu levelEdit;
+	JMenuItem newLevel;
+	JMenuItem editLevel;
 	JMenu about;
 	JMenu icons;
 	JMenuItem gruppe30;
@@ -102,6 +106,18 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		
 		add(options);
 		
+		levelEdit = new JMenu("Level-Editor");
+		
+		newLevel = new JMenuItem("New Level");
+		newLevel.addActionListener(this);
+		levelEdit.add(newLevel);
+		
+		editLevel = new JMenuItem("Edit Level");
+		editLevel.addActionListener(this);
+		levelEdit.add(editLevel);
+		
+		add(levelEdit);
+		
 		about = new JMenu("About");
 		
 		gruppe30 = new JMenuItem("Information");
@@ -166,6 +182,15 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		else if (e.getSource() == soundoff) {
 			// Sound abschalten
 			bomberman.sound = false;
+		}
+		else if(e.getSource() == newLevel) {
+			// Level-Editor für neues level starten
+			bomberman.startEditor("Levels/leer.txt");
+			
+		}
+		else if(e.getSource() == editLevel) {
+			// Level-Editor für schon bestehendes level starten
+			
 		}
 		else if(e.getSource() == gruppe30) {
 			// Gruppe30 Info anzeigen

@@ -102,6 +102,7 @@ public class Stage extends JPanel {
 		ps.close();	
 	}
 	
+	
 	/**
 	 * Prüft ob auf der Feld-Position p das Feld field ist
 	 * @param p Feld-Position
@@ -279,7 +280,7 @@ public class Stage extends JPanel {
 					}
 				}
 			}
-			if(bomberman.playerCount == 1){
+			if(bomberman.playerCount == 1 && !bomberman.inLevelEditor){
 				p1 = (bomberman.player.maxBombs);
 				r1 = (Bomb.radius1);
 				lvl = (bomberman.level);
@@ -301,7 +302,7 @@ public class Stage extends JPanel {
 				
 				}
 			// Anzeige in den Ecken
-			if(bomberman.playerCount == 2){
+			if(bomberman.playerCount == 2 && !bomberman.inLevelEditor){
 			p1 = (bomberman.player.maxBombs);
 			p2 = (bomberman.player2.maxBombs);
 			r1 = (Bomb.radius1);
@@ -322,7 +323,7 @@ public class Stage extends JPanel {
 			}
 			Font font2 = new Font("Arial", Font.BOLD, 15);
 			g.setFont(font2);
-			if(!bomberman.player.isDead){
+			if(!bomberman.player.isDead && !bomberman.inLevelEditor){
 			g.setColor(Color.GREEN);
 			g.drawImage(bomberman.imageMap.get("player_right"),5, 605, 40, 40 ,null);
 			g.drawImage(bomberman.imageMap.get("bomb"),50, 620, 25, 25 ,null);
@@ -335,7 +336,7 @@ public class Stage extends JPanel {
 				}
 			
 
-			if(!bomberman.player2.isDead){
+			if(!bomberman.player2.isDead && !bomberman.inLevelEditor){
 			g.setColor(Color.CYAN);
 			g.drawImage(bomberman.imageMap.get("player2_left"),805, 605, 40, 40 ,null);
 			g.drawImage(bomberman.imageMap.get("bomb"),770, 620, 25, 25 ,null);
