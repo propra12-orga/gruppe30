@@ -353,6 +353,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	 * startet den leveleditor
 	 */
 	public void startEditor(String filename){
+		stage.focused = 1;
 		isRunning = true;
 		inLevelEditor = true;
 		player.isDead = true;
@@ -568,25 +569,86 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	
 	public void mouseReleased(MouseEvent e) {
 		Point Click = e.getPoint();
-		
-		if(Click.y > 655 && Click.y < 695){
-			if(Click.x > 5 && Click.x <45 ){
+		// Klick auf die menuleiste unten
+		if(Click.y >= 655 && Click.y <= 695){
+			if(Click.x >= 5 && Click.x <=45 ){
 				stage.focused = 1;
 			}
-			if(Click.x > 55 && Click.x <95 ){
+			if(Click.x >= 55 && Click.x <=95 ){
 				stage.focused = 2;
 			}
-			if(Click.x > 105 && Click.x <145 ){
+			if(Click.x >= 105 && Click.x <=145 ){
 				stage.focused = 3;
 			}
-			if(Click.x > 155 && Click.x <195 ){
+			if(Click.x >= 155 && Click.x <=195 ){
 				stage.focused = 4;
 			}
-			if(Click.x > 205 && Click.x <245 ){
+			if(Click.x >= 205 && Click.x <=245 ){
 				stage.focused = 5;
 			}
-			if(Click.x > 255 && Click.x <295 ){
+			if(Click.x >= 255 && Click.x <=295 ){
 				stage.focused = 6;
+			}
+			if(Click.x >=760 && Click.x <= 820){
+				String name = JOptionPane.showInputDialog(null, "Insert level name!", "Saving", JOptionPane.PLAIN_MESSAGE);
+				if(name != null){
+				System.out.println(name);
+					try{
+						stage.save(name);
+					}catch(Exception ex){}
+				
+				}
+			}
+		}
+		
+		Point position = new Point((int)(Click.x/50),(int)(Click.y/50));
+		// click ins feld rein
+		if(position.x >0 && position.x <17 && position.y >0 && position.y <12){
+			if(stage.focused == 1){
+				if(stage.stageArray[position.x][position.y-1] == 'g'){
+					stage.stageArray[position.x][position.y-1] = 'x';
+				}else
+					stage.stageArray[position.x][position.y-1] = 'b';
+				
+			}
+			if(stage.focused == 2){
+				stage.stageArray[position.x][position.y-1] = 'a';
+			}
+			if(stage.focused == 3){
+				stage.stageArray[position.x][position.y-1] = 0;
+			}
+			if(stage.focused == 4){
+				for(int i = 1; i < 17 ; i++){
+					for(int j = 1; j < 12 ; j++){
+						if(stage.stageArray[i][j] == 'p'){
+							stage.stageArray[i][j] = 0;
+							break;
+						}
+					}
+				}
+				stage.stageArray[position.x][position.y-1] = 'p';
+			}
+			if(stage.focused == 5){
+				for(int i = 1; i < 17 ; i++){
+					for(int j = 1; j < 12 ; j++){
+						if(stage.stageArray[i][j] == 'l'){
+							stage.stageArray[i][j] = 0;
+							break;
+						}
+					}
+				}
+				stage.stageArray[position.x][position.y-1] = 'l';
+			}
+			if(stage.focused == 6){
+				for(int i = 1; i < 17 ; i++){
+					for(int j = 1; j < 12 ; j++){
+						if(stage.stageArray[i][j] == 'g' || stage.stageArray[i][j] == 'x' ){
+							stage.stageArray[i][j] = 0;
+							break;
+						}
+					}
+				}
+				stage.stageArray[position.x][position.y-1] = 'g';
 			}
 		}
 		

@@ -24,11 +24,12 @@ public class Stage extends JPanel {
 	public static final char BOXGATE = 'x';
 	public static final char BOMBUP = 'z';
 	public static final char POWERUP = 'u';
+
 	int k, p1, p2, r1, r2, p1w, p2w, lvl, con;
 	
 	int focused;
 	Bomberman bomberman;
-	private char[][] stageArray;
+	public char[][] stageArray;
 	public Stage(Bomberman bomberman) {
 		this.bomberman = bomberman;
 		setSize(850, 650);
@@ -215,6 +216,7 @@ public class Stage extends JPanel {
 	}
 	
 	
+	
 	private Image buffer;
 	public void paint(Graphics graphics) {
 		if (buffer == null) {
@@ -242,6 +244,9 @@ public class Stage extends JPanel {
 						if(bomberman.playerCount == 1 ){
 							g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
 						}
+						if(bomberman.inLevelEditor){
+							g.drawImage(bomberman.imageMap.get("gate"), x * 50, y * 50, 50, 50, this);
+						}
 						break;
 					case Stage.BOX:
 						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
@@ -256,6 +261,14 @@ public class Stage extends JPanel {
 					case Stage.POWERUP:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
 						g.drawImage(bomberman.imageMap.get("pup"), x * 50, y * 50, 40, 40, this);
+						break;
+					case Stage.PLAYER:
+						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
+						g.drawImage(bomberman.imageMap.get("player_left"), x * 50, y * 50, 50, 50, this);
+						break;
+					case Stage.PLAYER2:
+						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
+						g.drawImage(bomberman.imageMap.get("player2_left"), x * 50, y * 50, 50, 50, this);
 						break;
 					default:
 						g.drawImage(bomberman.imageMap.get("floor"), x * 50, y * 50, 50, 50, this);
@@ -364,6 +377,12 @@ public class Stage extends JPanel {
 				g.drawImage(bomberman.imageMap.get("player_left"), 155 ,605 ,40 ,40 , null);
 				g.drawImage(bomberman.imageMap.get("player2_left"), 205 ,605 ,40 ,40 , null);
 				g.drawImage(bomberman.imageMap.get("gate"), 255,605 ,40 ,40, null);
+				
+				g.fillRect(760, 605, 60, 40);
+				g.setColor(Color.WHITE);
+				Font font3 = new Font("Arial", Font.BOLD, 20);
+				g.setFont(font3);
+				g.drawString("Save",766 ,630);
 				
 				// Umwandung des ausgewählen buttons
 				g.setColor(Color.RED);
