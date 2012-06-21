@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-public class Bomberman extends JFrame implements KeyListener, ActionListener {
+public class Bomberman extends JFrame implements KeyListener, ActionListener, MouseListener {
 	private static final long serialVersionUID = 1L;
 	boolean isRunning;
 	boolean isFinished;
@@ -28,6 +30,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	boolean sound = true;
 	boolean inLevelEditor;
 	int playerCount, player1win = 0, player2win = 0, Continue;
+
 	Stage stage;
 	Player player;
 	List<Bomb> bombList;
@@ -84,6 +87,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 		keyReleasedCodes = new ArrayList<Integer>();
 		
 		addKeyListener(this);
+		addMouseListener(this);
 		
 		// 25ms Timer hinzufügen
 		timer = new Timer(25, this);
@@ -208,6 +212,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 */
 	public void startGame(int playerCount, int level) {
 		inLevelEditor = false;
+		
 		this.level = level;
 		this.playerCount = playerCount;
 		if(music) playMusic(musicMap.get("game"));
@@ -406,7 +411,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 	 }
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == timer && isRunning && !isFinished && !inLevelEditor) {
+		if (e.getSource() == timer && isRunning && !isFinished) {
+
 			// Wenn das Gate erreicht wurde
 			if(playerCount == 1){
 				if (stage.isPointOnField(player.getStagePosition(), Stage.GATE)) {
@@ -530,7 +536,61 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener {
 			// Feld neu zeichnen
 			stage.repaint();
 		}
+	
 		
+	
+	
+	// Mouse Listener
+
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public void mouseReleased(MouseEvent e) {
+		Point Click = e.getPoint();
+		
+		if(Click.y > 655 && Click.y < 695){
+			if(Click.x > 5 && Click.x <45 ){
+				stage.focused = 1;
+			}
+			if(Click.x > 55 && Click.x <95 ){
+				stage.focused = 2;
+			}
+			if(Click.x > 105 && Click.x <145 ){
+				stage.focused = 3;
+			}
+			if(Click.x > 155 && Click.x <195 ){
+				stage.focused = 4;
+			}
+			if(Click.x > 205 && Click.x <245 ){
+				stage.focused = 5;
+			}
+			if(Click.x > 255 && Click.x <295 ){
+				stage.focused = 6;
+			}
+		}
+		
+	}
 	
 	public static void main(String args[]) {
 		new Bomberman();

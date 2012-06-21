@@ -26,6 +26,7 @@ public class Stage extends JPanel {
 	public static final char POWERUP = 'u';
 	int k, p1, p2, r1, r2, p1w, p2w, lvl, con;
 	
+	int focused;
 	Bomberman bomberman;
 	private char[][] stageArray;
 	public Stage(Bomberman bomberman) {
@@ -34,6 +35,7 @@ public class Stage extends JPanel {
 		setPreferredSize(getSize());
 		
 		stageArray = new char[17][13];
+		focused = 0;
 	}
 	
 	/**
@@ -347,6 +349,42 @@ public class Stage extends JPanel {
 				g.setColor(Color.RED);
 				g.drawString("Player 2 is Dead", 690, 625);
 				}
+			}
+			// Untere Leiste während des leveleditors
+			if(bomberman.inLevelEditor){
+				g.drawImage(bomberman.imageMap.get("box"), 5 ,605 ,40 ,40 , null);
+				g.drawImage(bomberman.imageMap.get("block"), 55 ,605 ,40 ,40 , null);
+				g.drawImage(bomberman.imageMap.get("floor"), 105 ,605 ,40 ,40 , null);
+				g.drawImage(bomberman.imageMap.get("player_left"), 155 ,605 ,40 ,40 , null);
+				g.drawImage(bomberman.imageMap.get("player2_left"), 205 ,605 ,40 ,40 , null);
+				g.drawImage(bomberman.imageMap.get("gate"), 255,605 ,40 ,40, null);
+				
+				// Umwandung des ausgewählen buttons
+				g.setColor(Color.RED);
+				switch(focused){
+				case 1:
+					g.drawRect(5, 605, 40, 40);
+					break;
+				case 2:
+					g.drawRect(55, 605, 40, 40);
+					break;
+				case 3:
+					g.drawRect(105, 605, 40, 40);
+					break;
+				case 4:
+					g.drawRect(155, 605, 40, 40);
+					break;
+				case 5:
+					g.drawRect(205, 605, 40, 40);
+					break;
+				case 6:
+					g.drawRect(255, 605, 40, 40);
+					break;
+					
+			}
+				g.setColor(Color.BLACK);
+				
+				
 			}
 		}
 
