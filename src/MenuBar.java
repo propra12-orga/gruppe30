@@ -151,8 +151,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			}
 		}
 		else if (e.getSource() == load) {
-			// Spiel laden
-			bomberman.Continue = 3;
+			// Spiel laden;
 			bomberman.startGame(1, 99);
 		}
 		else if (e.getSource() == menu) {

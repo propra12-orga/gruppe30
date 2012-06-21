@@ -45,10 +45,12 @@ public class Stage extends JPanel {
 	public void loadStage(String filename) {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename)));
-			for (int y = 0; y < 14; y++) {
+			for (int y = 0; y < 16; y++) {
 				String line = in.readLine();
 				if (y == 12) bomberman.player.maxBombs =  Integer.parseInt(line);
 				else if (y == 13) Bomb.radius1 = Integer.parseInt(line);
+				else if (y == 14) bomberman.Continue = Integer.parseInt(line);
+				else if (y == 15) bomberman.level = Integer.parseInt(line);
 				else if (y < 13){
 					for (int x = 0; x < 17; x++) {
 						switch (line.charAt(x)) {
@@ -100,6 +102,10 @@ public class Stage extends JPanel {
 		ps.print(bomberman.player.maxBombs);
 		ps.println();
 		ps.print(Bomb.radius1);
+		ps.println();
+		ps.print(bomberman.Continue);
+		ps.println();
+		ps.print(bomberman.level);
 		ps.flush();
 		ps.close();	
 	}
