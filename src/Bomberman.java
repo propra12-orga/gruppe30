@@ -590,20 +590,38 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 				stage.focused = 6;
 			}
 			if(Click.x >=760 && Click.x <= 820){
-				String name = JOptionPane.showInputDialog(null, "Insert level name!", "Saving", JOptionPane.PLAIN_MESSAGE);
-				if(name != null){
-				System.out.println(name);
+				if(stage.validateField()){
+					JOptionPane.showMessageDialog(null, "Level meets requirements!","Success!", JOptionPane.INFORMATION_MESSAGE);
+					String name = JOptionPane.showInputDialog(null, "Insert level name!", "Saving", JOptionPane.PLAIN_MESSAGE);
+					if(name != null){
+					System.out.println(name);
+					String filename = "src/Levels/" + name;
 					try{
-						stage.save(name);
+						stage.save(filename);
 					}catch(Exception ex){}
-				
+					Object[] options = {"Singleplayer", "2 Players", "Edit Level","Exit"};
+					int selected = JOptionPane.showOptionDialog(null,"Play it now?", "Level saved!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					switch(selected){
+					case 0: //startGame(1,filename);
+							break;
+					case 1: //startGame(2, filename)
+							break;
+					case 3: showStartScreen();
+							break;
+					}
+					
+					
+					}
+				}else{
+					JOptionPane.showMessageDialog(null, "Something is missing! \nMake sure you have set the players starting point and the exit!\nPlayers must be able to reach exit, too!","Error!", JOptionPane.INFORMATION_MESSAGE);
 				}
+				
 			}
 		}
 		
 		Point position = new Point((int)(Click.x/50),(int)(Click.y/50));
 		// click ins feld rein
-		if(position.x >0 && position.x <17 && position.y >0 && position.y <12){
+		if(position.x >0 && position.x <16 && position.y >1 && position.y <12){
 			if(stage.focused == 1){
 				if(stage.stageArray[position.x][position.y-1] == 'g'){
 					stage.stageArray[position.x][position.y-1] = 'x';

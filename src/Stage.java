@@ -29,7 +29,9 @@ public class Stage extends JPanel {
 	
 	int focused;
 	Bomberman bomberman;
+	
 	public char[][] stageArray;
+	public boolean[][] way;
 	public Stage(Bomberman bomberman) {
 		this.bomberman = bomberman;
 		setSize(850, 650);
@@ -216,6 +218,66 @@ public class Stage extends JPanel {
 	}
 	
 	
+	/**
+	 * Überprüft, ob alle vorraussetzungen für ein level erfüllt sind
+	 * @return
+	 */
+	public boolean validateField(){
+		boolean player1set = false;
+		boolean player2set = false;
+		boolean gateset = false;
+		boolean exitReachable = false;
+		for(int x = 0; x < 17; x++ ){
+			for(int y = 0; y < 13; y++ ){
+				if(stageArray[x][y] == 'p')
+					player1set = true;
+				else if(stageArray[x][y] == 'l')
+					player2set = true;
+				else if(stageArray[x][y] == 'g' || stageArray[x][y] == 'x' ){
+					way = new boolean[17][13];
+					int result = exitReachable(x,y,0);
+					if(result >= 2){
+						exitReachable = true;
+					}
+					gateset = true;
+				}
+			}
+		}
+		if(player1set == true && player2set == true && gateset == true && exitReachable == true)
+			return true;
+		else return false;
+	}
+	
+	/**
+	 * überprüft ob das exit von beiden spieler erreicht werden kann
+	 * @param x, x position des gates im array feld
+	 * @param y, y position des gates im array feld
+	 * @param result, gibt an ob schon ein spieler gefunden wurde
+	 * @return
+	 */
+	
+	public int exitReachable(int x, int y, int result){
+		way[x][y] = true;
+		if(stageArray[x][y] == 'p' || stageArray[x][y] == 'l'){
+			result++;
+			return result;
+		}else{
+		for(int i=-1; i <=1 ; i+=2){
+			int x2 = x+i;
+			int y2 = y+i;
+			if(y2 > 0 && y2 < 13 && stageArray[x][y2] != 'a' && way[x][y2] != true){
+				result += exitReachable(x, y2, result);
+					
+			}
+			if(x2>0 && x2 < 17 && stageArray[x2][y] != 'a' && way[x2][y] != true){
+				result += exitReachable(x2, y, result);
+				
+			}
+		}
+		return result;
+		}
+		
+	}
 	
 	private Image buffer;
 	public void paint(Graphics graphics) {
