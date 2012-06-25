@@ -7,8 +7,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -47,7 +45,11 @@ public class Stage extends JPanel {
 	 */
 	public void loadStage(String filename) {
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename)));
+			System.out.println("");
+			System.out.println(filename);
+			System.out.println(getClass().getClassLoader().getResourceAsStream(filename));
+			BufferedReader in = new BufferedReader(new FileReader(filename));//InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename)));
+			System.out.println(in.ready());
 			for (int y = 0; y < 16; y++) {
 				String line = in.readLine();
 				if (y == 12) bomberman.player.maxBombs =  Integer.parseInt(line);
@@ -80,6 +82,7 @@ public class Stage extends JPanel {
 				}
 				}
 			}
+			in.close();
 			repaint();
 		}
 		catch(Exception ex) {}
@@ -111,8 +114,28 @@ public class Stage extends JPanel {
 		ps.print(bomberman.level);
 		ps.flush();
 		ps.close();	
+		
 	}
-	
+	/**
+	 * Speichert das Level
+	 * @param filename Name des Levels
+	 * @throws IOException
+	 */
+	public void saveLevel(String filename) throws IOException {
+		File save = new File(filename);
+		FileWriter out = new FileWriter(save);
+		Writer bw = new BufferedWriter(out);
+		PrintWriter ps = new PrintWriter(bw);
+		for (int y = 0; y < 12; y++) {
+			for (int x = 0; x < 17; x++) {
+					ps.print(stageArray[x][y]);
+					if(x==16) ps.println();
+			}		
+		}
+		ps.flush();
+		ps.close();	
+		
+	}
 	
 	/**
 	 * Prüft ob auf der Feld-Position p das Feld field ist

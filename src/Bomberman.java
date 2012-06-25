@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	Map<String, Image> imageMap;
 	Map<String, URL> musicMap;
 	Map<String, URL> soundMap;
+	Map<String, String> levelMap;
 	int level = 1;
 	int timeout;
 	
@@ -63,6 +65,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 		loadImages();
 		loadMusic();
 		loadSounds();
+		loadLevels();
 		
 		// Spieler hinzufügen
 		player = new Player(this,1);
@@ -94,6 +97,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 		timer.start();
 	}
 	
+	
+
 	/**
 	 * Zeigt den Startbildschirm an
 	 */
@@ -170,6 +175,28 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	}
 	
 	/**
+	 * Lädt alle Levels in eine Map
+	 */
+	public void loadLevels() {
+		levelMap = new HashMap<String, String>();
+		
+		try{
+			File dir = new File("src/Levels");
+			String[] levels = dir.list();
+			int name=0;
+			for(String s : levels){
+				levelMap.put("" + name, "src/Levels/" +s);
+				name++;
+
+			}
+			
+		}
+		catch(Exception ex){}
+		
+		
+	}
+	
+	/**
 	 * Spielt eine eine Musikdatei im Hintergrund ab
 	 * @param file Musikdatei
 	 */
@@ -238,9 +265,13 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 		
 		keyCodes.clear();
 		keyReleasedCodes.clear();
-		
-		stage.loadStage("levels/" + level);
-		
+		if(level == 999999999){
+			stage.loadStage("src/res/savegame");
+		}
+		else{
+			System.out.println(levelMap.get(""+level));
+			stage.loadStage(levelMap.get(""+level));
+		}
 		stage.repaint();
 	}
 	
@@ -569,6 +600,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	
 	public void mouseReleased(MouseEvent e) {
 		Point Click = e.getPoint();
+		if(inLevelEditor == true){
 		// Klick auf die menuleiste unten
 		if(Click.y >= 655 && Click.y <= 695){
 			if(Click.x >= 5 && Click.x <=45 ){
@@ -594,17 +626,22 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 					JOptionPane.showMessageDialog(null, "Level meets requirements!","Success!", JOptionPane.INFORMATION_MESSAGE);
 					String name = JOptionPane.showInputDialog(null, "Insert level name!", "Saving", JOptionPane.PLAIN_MESSAGE);
 					if(name != null){
-					System.out.println(name);
 					String filename = "src/Levels/" + name;
+					int newName = 1;
 					try{
-						stage.save(filename);
+						stage.saveLevel(filename);
+						newName = levelMap.size() -1;
+						levelMap.put("" + newName, filename);
 					}catch(Exception ex){}
 					Object[] options = {"Singleplayer", "2 Players", "Edit Level","Exit"};
 					int selected = JOptionPane.showOptionDialog(null,"Play it now?", "Level saved!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 					switch(selected){
-					case 0: //startGame(1,filename);
+					case 0: Continue = 3;
+							inLevelEditor = false;
+							startGame(1, newName);
 							break;
-					case 1: //startGame(2, filename)
+					case 1: inLevelEditor = false;
+							startGame(2, newName);
 							break;
 					case 3: showStartScreen();
 							break;
@@ -669,7 +706,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 				stage.stageArray[position.x][position.y-1] = 'g';
 			}
 		}
-		
+		}
 	}
 	
 	public static void main(String args[]) {

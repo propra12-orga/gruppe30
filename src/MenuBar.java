@@ -144,7 +144,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		else if (e.getSource() == save) {
 			// Spiel speichern
 			try {
-				bomberman.stage.save("src/Levels/99");
+				bomberman.stage.save("src/res/savegame");
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -152,7 +152,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		}
 		else if (e.getSource() == load) {
 			// Spiel laden;
-			bomberman.startGame(1, 99);
+			bomberman.startGame(1, 999999999);
 		}
 		else if (e.getSource() == menu) {
 			// Programm beenden
@@ -184,7 +184,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		}
 		else if(e.getSource() == newLevel) {
 			// Level-Editor für neues level starten
-			bomberman.startEditor("Levels/leer.txt");
+			bomberman.startEditor("src/res/leer.txt");
 			
 		}
 		else if(e.getSource() == editLevel) {
