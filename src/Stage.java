@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.*;
 import java.util.Random;
 
@@ -45,11 +47,8 @@ public class Stage extends JPanel {
 	 */
 	public void loadStage(String filename) {
 		try {
-			System.out.println("");
-			System.out.println(filename);
-			System.out.println(getClass().getClassLoader().getResourceAsStream(filename));
+			
 			BufferedReader in = new BufferedReader(new FileReader(filename));//InputStreamReader(getClass().getClassLoader().getResourceAsStream(filename)));
-			System.out.println(in.ready());
 			for (int y = 0; y < 16; y++) {
 				String line = in.readLine();
 				if (y == 12) bomberman.player.maxBombs =  Integer.parseInt(line);
@@ -337,6 +336,9 @@ public class Stage extends JPanel {
 						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
 						break;
 					case Stage.BOXGATE:
+						if(bomberman.inLevelEditor){
+							g.drawImage(bomberman.imageMap.get("boxgate"), x * 50, y * 50, 50, 50, this);
+						}else
 						g.drawImage(bomberman.imageMap.get("box"), x * 50, y * 50, 50, 50, this);
 						break;
 					case Stage.BOMBUP:

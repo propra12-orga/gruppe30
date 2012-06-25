@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JMenu;
@@ -189,7 +190,12 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		}
 		else if(e.getSource() == editLevel) {
 			// Level-Editor für schon bestehendes level starten
-			
+			String option[] = new String[bomberman.levelMap.size()];
+			for(int i = 0; i < bomberman.levelMap.size(); i++){
+				option[i] = new File(bomberman.levelMap.get("" + i)).getName();
+			}
+			String erg = (String) JOptionPane.showInputDialog(bomberman, "Pick a level to edit", "Edit level", JOptionPane.INFORMATION_MESSAGE,null , option, "Titan");
+			bomberman.startEditor("src/levels/" + erg);
 		}
 		else if(e.getSource() == gruppe30) {
 			// Gruppe30 Info anzeigen
