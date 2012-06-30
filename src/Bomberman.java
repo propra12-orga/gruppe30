@@ -8,7 +8,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +35,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	boolean music = true;
 	boolean sound = true;
 	boolean inLevelEditor;
+	boolean host;
+	boolean client;
 	int playerCount, player1win = 0, player2win = 0, Continue;
 
 	Stage stage;
@@ -239,6 +246,33 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	 * @param welches level soll gestartet werden
 	 */
 	public void startGame(int playerCount, int level) {
+		if (host){
+			 try
+			    {
+			      ServerSocket serverSocket = new ServerSocket(1234);
+			      Socket clientSocket = serverSocket.accept();
+			      System.out.println("Server erstellt!");
+			      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+			      out.println("Test");
+			    }
+			    catch (Exception e)
+			    {
+			    	System.out.println("Server erstellen fehlgeschlagen!");
+			    }
+		}
+		if (client){
+			try
+		    {
+		      Socket socket = new Socket ("localhost", 1234);
+		      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		      String serverResponse = in.readLine();
+		      System.out.println("Server-Antwort: " + serverResponse);
+		    }
+		    catch (Exception ex)
+		    {
+		    	System.out.println("Verbindung fehlgeschlagen!");
+		    }
+		}
 		inLevelEditor = false;
 		
 		this.level = level;
@@ -506,7 +540,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 				}
 			}
 			
-			if (hasReleased(KeyEvent.VK_B) && !player.isDead) {
+			if (hasReleased(KeyEvent.VK_B) && !player.isDead && !client) {
 				/// Bombe legen
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player.getActiveBombs() < player.maxBombs && bomb.canLayOn(player.getStagePosition())) {
@@ -519,7 +553,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 				
 			}
 			
-			if (hasReleased(KeyEvent.VK_L) && !player2.isDead) {
+			if (hasReleased(KeyEvent.VK_L) && !player2.isDead && !host) {
 				/// Bombe legen
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player2.getActiveBombs() < player2.maxBombs && bomb.canLayOn(player2.getStagePosition())) {
@@ -534,7 +568,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			/*
 			 *  Spieler Steuerung
 			 */
-			if(!player.isDead && !inLevelEditor){
+			if(!player.isDead && !inLevelEditor && !client){
 				if (isPressing(KeyEvent.VK_A)) {
 					player.moveLeft();
 				}
@@ -551,7 +585,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			//player 2
 			
 				
-			if(!player2.isDead && !inLevelEditor){
+			if(!player2.isDead && !inLevelEditor && !host){
 				if (isPressing(KeyEvent.VK_LEFT)) {
 					player2.moveLeft();
 				}

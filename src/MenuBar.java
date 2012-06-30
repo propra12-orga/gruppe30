@@ -23,6 +23,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	JMenu game;
 	JMenuItem newGame;
 	JMenuItem newGame2;
+	JMenuItem host;
+	JMenuItem client;
 	JMenuItem save;
 	JMenuItem load;
 	JMenuItem menu;
@@ -52,6 +54,18 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		newGame2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Event.CTRL_MASK));
 		newGame2.addActionListener(this);
 		game.add(newGame2);
+		
+		game.add(new JSeparator());
+		
+		host = new JMenuItem("Host");
+		host.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, Event.CTRL_MASK));
+		host.addActionListener(this);
+		game.add(host);
+		
+		client = new JMenuItem("Connect");
+		client.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
+		client.addActionListener(this);
+		game.add(client);
 		
 		game.add(new JSeparator());
 		
@@ -132,6 +146,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == newGame) {
 			// Neues Spiel starten
+			bomberman.host = false;
+			bomberman.client = false;
 			bomberman.Continue = 3;
 			bomberman.startGame(1, 1);
 		}
@@ -140,6 +156,24 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			// Neues Spiel starten
 			bomberman.player1win = 0;
 			bomberman.player2win = 0;
+			bomberman.host = false;
+			bomberman.client = false;
+			bomberman.startGame(2, 1);
+		}
+		else if (e.getSource() == host) {
+			// Neues Spiel hosten
+			bomberman.player1win = 0;
+			bomberman.player2win = 0;
+			bomberman.host = true;
+			bomberman.client = false;
+			bomberman.startGame(2, 1);
+		}
+		else if (e.getSource() == client) {
+			// Mit Host verbinden
+			bomberman.player1win = 0;
+			bomberman.player2win = 0;
+			bomberman.host = false;
+			bomberman.client = true;
 			bomberman.startGame(2, 1);
 		}
 		else if (e.getSource() == save) {
