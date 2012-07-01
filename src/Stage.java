@@ -319,16 +319,34 @@ public class Stage extends JPanel {
 			// Spielfeld
 			if(bomberman.host){
 				try {
+					char stage1[] = new char[16];
+					for(int y=0; y<12;y++){
+						for(int x=0; x<16;x++){
+							stage1[x]=stageArray[x][y];
+							bomberman.sout.writeChar(stage1[x]);
+						}
+					}
 					bomberman.sout.writeInt(bomberman.player.position.x);
 					bomberman.sout.writeInt(bomberman.player.position.y);
+					bomberman.sout.writeInt(bomberman.player.maxBombs);
+					bomberman.sout.writeInt(Bomb.radius1);
+					bomberman.sout.writeBoolean(bomberman.player.isDead);
 					bomberman.sout.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				try {
+					for(int y=0; y<12;y++){
+						for(int x=0; x<16;x++){
+							stageArray[x][y] = bomberman.sin.readChar();
+						}
+					}
 					bomberman.player2.position.x = bomberman.sin.readInt();
 					bomberman.player2.position.y = bomberman.sin.readInt();
+					bomberman.player2.maxBombs = bomberman.sin.readInt();
+					Bomb.radius2 = bomberman.sin.readInt();
+					bomberman.player2.isDead = bomberman.sin.readBoolean();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -336,16 +354,34 @@ public class Stage extends JPanel {
 			}
 			if(bomberman.client){
 				try {
+					char stage1[] = new char[16];
+					for(int y=0; y<12;y++){
+						for(int x=0; x<16;x++){
+							stage1[x]=stageArray[x][y];
+							bomberman.cout.writeChar(stage1[x]);
+						}
+					}
 					bomberman.cout.writeInt(bomberman.player2.position.x);
 					bomberman.cout.writeInt(bomberman.player2.position.y);
+					bomberman.cout.writeInt(bomberman.player2.maxBombs);
+					bomberman.cout.writeInt(Bomb.radius2);
+					bomberman.cout.writeBoolean(bomberman.player2.isDead);
 					bomberman.cout.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				try {
+					for(int y=0; y<12;y++){
+						for(int x=0; x<16;x++){
+							stageArray[x][y] = bomberman.cin.readChar();
+						}
+					}
 					bomberman.player.position.x = bomberman.cin.readInt();
 					bomberman.player.position.y = bomberman.cin.readInt();
+					bomberman.player.maxBombs = bomberman.cin.readInt();
+					Bomb.radius1 = bomberman.cin.readInt();
+					bomberman.player.isDead = bomberman.cin.readBoolean();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
