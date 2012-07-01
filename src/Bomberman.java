@@ -9,8 +9,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -38,6 +41,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	boolean host;
 	boolean client;
 	int playerCount, player1win = 0, player2win = 0, Continue;
+	DataOutputStream sout;
+	DataOutputStream cout;
+	DataInputStream sin;
+	DataInputStream cin;
 
 	Stage stage;
 	Player player;
@@ -251,9 +258,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			    {
 			      ServerSocket serverSocket = new ServerSocket(1234);
 			      Socket clientSocket = serverSocket.accept();
-			      System.out.println("Server erstellt!");
-			      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-			      out.println("Test");
+			      sout = new DataOutputStream(clientSocket.getOutputStream());
+			      sin = new DataInputStream(clientSocket.getInputStream());
 			    }
 			    catch (Exception e)
 			    {
@@ -264,9 +270,8 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			try
 		    {
 		      Socket socket = new Socket ("localhost", 1234);
-		      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		      String serverResponse = in.readLine();
-		      System.out.println("Server-Antwort: " + serverResponse);
+		      cout = new DataOutputStream(socket.getOutputStream());
+		      cin = new DataInputStream(socket.getInputStream());
 		    }
 		    catch (Exception ex)
 		    {

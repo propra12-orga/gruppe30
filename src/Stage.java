@@ -317,6 +317,40 @@ public class Stage extends JPanel {
 		else {
 			g.drawImage(bomberman.imageMap.get("board"), 0, 0, getWidth(), getHeight(), this);
 			// Spielfeld
+			if(bomberman.host){
+				try {
+					bomberman.sout.writeInt(bomberman.player.position.x);
+					bomberman.sout.writeInt(bomberman.player.position.y);
+					bomberman.sout.flush();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					bomberman.player2.position.x = bomberman.sin.readInt();
+					bomberman.player2.position.y = bomberman.sin.readInt();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(bomberman.client){
+				try {
+					bomberman.cout.writeInt(bomberman.player2.position.x);
+					bomberman.cout.writeInt(bomberman.player2.position.y);
+					bomberman.cout.flush();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					bomberman.player.position.x = bomberman.cin.readInt();
+					bomberman.player.position.y = bomberman.cin.readInt();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			for (int x = 0; x < 17; x++) {
 				for (int y = 0; y < 12; y++) {
 					switch (stageArray[x][y]) {
