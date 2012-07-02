@@ -542,6 +542,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			}
 			
 			if (hasReleased(KeyEvent.VK_B) && !player.isDead && !client) {
+				stage.b1 = true;
 				/// Bombe legen
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player.getActiveBombs() < player.maxBombs && bomb.canLayOn(player.getStagePosition())) {
@@ -555,6 +556,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			}
 			
 			if (hasReleased(KeyEvent.VK_L) && !player2.isDead && !host) {
+				stage.b2 = true;
 				/// Bombe legen
 					for (Bomb bomb : bombList) {
 						if (!bomb.isVisible && player2.getActiveBombs() < player2.maxBombs && bomb.canLayOn(player2.getStagePosition())) {

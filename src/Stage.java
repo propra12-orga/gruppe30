@@ -28,6 +28,9 @@ public class Stage extends JPanel {
 	int focused;
 	Bomberman bomberman;
 	
+	boolean b1;
+	boolean b2;
+	
 	public char[][] stageArray;
 	public boolean[][] way;
 	public Stage(Bomberman bomberman) {
@@ -316,6 +319,7 @@ public class Stage extends JPanel {
 			g.drawImage(bomberman.imageMap.get("board"), 0, 0, getWidth(), getHeight(), this);
 			// Spielfeld
 			if(bomberman.host){
+				// Daten an Client schicken
 				try {
 					char stage1[] = new char[17];
 					for(int y=0; y<12;y++){
@@ -328,12 +332,16 @@ public class Stage extends JPanel {
 					bomberman.sout.writeInt(bomberman.player.position.y);
 					bomberman.sout.writeInt(bomberman.player.maxBombs);
 					bomberman.sout.writeInt(Bomb.radius1);
+					if(b1)bomberman.sout.writeBoolean(true);
+					else bomberman.sout.writeBoolean(false);
+					b1 = false;
 					bomberman.sout.writeBoolean(bomberman.player.isDead);
 					bomberman.sout.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				// erhaltene Daten interpretieren
 				try {
 					char stages[][] = new char[17][13];
 					for(int y=0; y<12;y++){
@@ -352,6 +360,18 @@ public class Stage extends JPanel {
 					bomberman.player2.position.y = bomberman.sin.readInt();
 					bomberman.player2.maxBombs = bomberman.sin.readInt();
 					Bomb.radius2 = bomberman.sin.readInt();
+					b2 = bomberman.sin.readBoolean();
+					if(b2){
+					for (Bomb bomb : bomberman.bombList) {
+						if (!bomb.isVisible && bomberman.player2.getActiveBombs() < bomberman.player2.maxBombs && bomb.canLayOn(bomberman.player2.getStagePosition())) {
+							bomb.setToPlayer2Pos();
+							bomb.setOwner(bomberman.player2);
+							bomberman.player2.setActiveBombs(bomberman.player2.getActiveBombs()+1);
+							break;
+						}
+					}
+					b2 = false;
+					}
 					bomberman.player2.isDead = bomberman.sin.readBoolean();
 					}catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -359,6 +379,7 @@ public class Stage extends JPanel {
 				}
 			}
 			if(bomberman.client){
+				// Daten an Server schicken
 				try {
 					char stage2[] = new char[17];
 					for(int y=0; y<12;y++){
@@ -371,12 +392,16 @@ public class Stage extends JPanel {
 					bomberman.cout.writeInt(bomberman.player2.position.y);
 					bomberman.cout.writeInt(bomberman.player2.maxBombs);
 					bomberman.cout.writeInt(Bomb.radius2);
+					if(b2)bomberman.cout.writeBoolean(true);
+					else bomberman.cout.writeBoolean(false);
+					b2 = false;
 					bomberman.cout.writeBoolean(bomberman.player2.isDead);
 					bomberman.cout.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				// erhaltene Daten interpretieren
 				try {
 					char stagec[][] = new char[17][13];
 					for(int y=0; y<12;y++){
@@ -395,6 +420,18 @@ public class Stage extends JPanel {
 					bomberman.player.position.y = bomberman.cin.readInt();
 					bomberman.player.maxBombs = bomberman.cin.readInt();
 					Bomb.radius1 = bomberman.cin.readInt();
+					b1 = bomberman.cin.readBoolean();
+					if(b1){
+					for (Bomb bomb : bomberman.bombList) {
+						if (!bomb.isVisible && bomberman.player.getActiveBombs() < bomberman.player.maxBombs && bomb.canLayOn(bomberman.player.getStagePosition())) {
+							bomb.setToPlayerPos();
+							bomb.setOwner(bomberman.player);
+							bomberman.player.setActiveBombs(bomberman.player.getActiveBombs()+1);
+							break;
+						}
+					}
+					b1 = false;
+					}
 					bomberman.player.isDead = bomberman.cin.readBoolean();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
