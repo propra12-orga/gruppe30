@@ -6,8 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
 import java.io.*;
 import java.util.Random;
 
@@ -319,9 +317,9 @@ public class Stage extends JPanel {
 			// Spielfeld
 			if(bomberman.host){
 				try {
-					char stage1[] = new char[16];
+					char stage1[] = new char[17];
 					for(int y=0; y<12;y++){
-						for(int x=0; x<16;x++){
+						for(int x=0; x<17;x++){
 							stage1[x]=stageArray[x][y];
 							bomberman.sout.writeChar(stage1[x]);
 						}
@@ -337,9 +335,17 @@ public class Stage extends JPanel {
 					e1.printStackTrace();
 				}
 				try {
+					char stages[][] = new char[17][13];
 					for(int y=0; y<12;y++){
-						for(int x=0; x<16;x++){
-							stageArray[x][y] = bomberman.sin.readChar();
+						for(int x=0; x<17;x++){
+							stages[x][y] = bomberman.sin.readChar();
+							if(stages[x][y]==0 || stageArray[x][y]==0)
+								stageArray[x][y] = 0;
+							else if(stages[x][y]=='z' || stageArray[x][y]=='z')
+								stageArray[x][y] = 'z';
+							else if(stages[x][y]=='u' || stageArray[x][y]=='u')
+								stageArray[x][y] = 'u';
+							else stageArray[x][y] = stages[x][y];
 						}
 					}
 					bomberman.player2.position.x = bomberman.sin.readInt();
@@ -347,18 +353,18 @@ public class Stage extends JPanel {
 					bomberman.player2.maxBombs = bomberman.sin.readInt();
 					Bomb.radius2 = bomberman.sin.readInt();
 					bomberman.player2.isDead = bomberman.sin.readBoolean();
-				} catch (IOException e) {
+					}catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			if(bomberman.client){
 				try {
-					char stage1[] = new char[16];
+					char stage2[] = new char[17];
 					for(int y=0; y<12;y++){
-						for(int x=0; x<16;x++){
-							stage1[x]=stageArray[x][y];
-							bomberman.cout.writeChar(stage1[x]);
+						for(int x=0; x<17;x++){
+							stage2[x]=stageArray[x][y];
+							bomberman.cout.writeChar(stage2[x]);
 						}
 					}
 					bomberman.cout.writeInt(bomberman.player2.position.x);
@@ -372,9 +378,17 @@ public class Stage extends JPanel {
 					e1.printStackTrace();
 				}
 				try {
+					char stagec[][] = new char[17][13];
 					for(int y=0; y<12;y++){
-						for(int x=0; x<16;x++){
-							stageArray[x][y] = bomberman.cin.readChar();
+						for(int x=0; x<17;x++){
+							stagec[x][y] = bomberman.cin.readChar();
+							if(stagec[x][y]==0 || stageArray[x][y]==0)
+								stageArray[x][y] = 0;
+							else if(stagec[x][y]=='z' || stageArray[x][y]=='z')
+								stageArray[x][y] = 'z';
+							else if(stagec[x][y]=='u' || stageArray[x][y]=='u')
+								stageArray[x][y] = 'u';
+							else stageArray[x][y] = stagec[x][y];
 						}
 					}
 					bomberman.player.position.x = bomberman.cin.readInt();
