@@ -335,7 +335,7 @@ public class Stage extends JPanel {
 					if(b1)bomberman.sout.writeBoolean(true);
 					else bomberman.sout.writeBoolean(false);
 					b1 = false;
-					bomberman.sout.writeBoolean(bomberman.player.isDead);
+					//bomberman.sout.writeBoolean(bomberman.player.isDead);
 					bomberman.sout.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -372,7 +372,7 @@ public class Stage extends JPanel {
 					}
 					b2 = false;
 					}
-					bomberman.player2.isDead = bomberman.sin.readBoolean();
+					//bomberman.player2.isDead = bomberman.sin.readBoolean();
 					}catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -395,7 +395,7 @@ public class Stage extends JPanel {
 					if(b2)bomberman.cout.writeBoolean(true);
 					else bomberman.cout.writeBoolean(false);
 					b2 = false;
-					bomberman.cout.writeBoolean(bomberman.player2.isDead);
+					//bomberman.cout.writeBoolean(bomberman.player2.isDead);
 					bomberman.cout.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -432,7 +432,7 @@ public class Stage extends JPanel {
 					}
 					b1 = false;
 					}
-					bomberman.player.isDead = bomberman.cin.readBoolean();
+					//bomberman.player.isDead = bomberman.cin.readBoolean();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
@@ -253,26 +254,54 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			 try
 			    {
 			      ServerSocket serverSocket = new ServerSocket(1234);
-			      Socket clientSocket = serverSocket.accept();
+			      
+			      Object[] options = {"Ok","Abbrechen"};
+					int selected = JOptionPane.showOptionDialog(null,"You will wait 15 seconds for client.", "Status", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+					JOptionPane.getRootFrame().dispose();
+					switch(selected){
+					case 1: host = false;
+						    showStartScreen();
+					        stage.repaint();
+					        return;
+					}
+				  serverSocket.setSoTimeout(15000);
+				  Socket clientSocket = serverSocket.accept();
 			      sout = new DataOutputStream(clientSocket.getOutputStream());
 			      sin = new DataInputStream(clientSocket.getInputStream());
 			    }
-			    catch (Exception e)
+			    catch (IOException e)
 			    {
-			    	System.out.println("Server erstellen fehlgeschlagen!");
+			    	JOptionPane.showMessageDialog(null, "Couldn't start server!","Error", JOptionPane.INFORMATION_MESSAGE);
+			    	host = false;
+			    	showStartScreen();
+					stage.repaint();
+					return;
 			    }
 		}
 		if (client){
+			String ip = JOptionPane.showInputDialog(null, "Insert IP", "Connect", JOptionPane.PLAIN_MESSAGE);
+			if(ip == null){
+				client = false;
+				showStartScreen();
+				stage.repaint();
+				return;
+			}
+			else{
 			try
 		    {
-		      Socket socket = new Socket ("localhost", 1234);
+		      Socket socket = new Socket (ip, 1234);
 		      cout = new DataOutputStream(socket.getOutputStream());
 		      cin = new DataInputStream(socket.getInputStream());
 		    }
 		    catch (Exception ex)
 		    {
-		    	System.out.println("Verbindung fehlgeschlagen!");
+		    	JOptionPane.showMessageDialog(null, "Couldn't connect to host!","Error", JOptionPane.INFORMATION_MESSAGE);
+		    	client = false;
+		    	showStartScreen();
+				stage.repaint();
+				return;
 		    }
+			}
 		}
 		inLevelEditor = false;
 		
