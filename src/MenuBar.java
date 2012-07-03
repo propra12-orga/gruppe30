@@ -146,6 +146,13 @@ public class MenuBar extends JMenuBar implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == newGame) {
 			// Neues Spiel starten
+			try {
+				bomberman.serverSocket.close();
+				bomberman.clientSocket.close();
+				bomberman.socket.close();
+			} catch (IOException e1) {
+				System.out.println("Couldn't close sockets");
+			}
 			bomberman.host = false;
 			bomberman.client = false;
 			bomberman.Continue = 3;
@@ -154,6 +161,13 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		
 		else if (e.getSource() == newGame2) {
 			// Neues Spiel starten
+			try {
+				bomberman.serverSocket.close();
+				bomberman.clientSocket.close();
+				bomberman.socket.close();
+			} catch (IOException e1) {
+				System.out.println("Couldn't close sockets");
+			}
 			bomberman.player1win = 0;
 			bomberman.player2win = 0;
 			bomberman.host = false;
@@ -187,10 +201,28 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		}
 		else if (e.getSource() == load) {
 			// Spiel laden;
+			try {
+				bomberman.serverSocket.close();
+				bomberman.clientSocket.close();
+				bomberman.socket.close();
+			} catch (IOException e1) {
+				System.out.println("Couldn't close sockets");
+			}
+			bomberman.host = false;
+			bomberman.client = false;
 			bomberman.startGame(1, 999999999);
 		}
 		else if (e.getSource() == menu) {
 			// Programm beenden
+			try {
+				bomberman.serverSocket.close();
+				bomberman.clientSocket.close();
+				bomberman.socket.close();
+			} catch (IOException e1) {
+				System.out.println("Couldn't close sockets");
+			}
+			bomberman.host = false;
+			bomberman.client = false;
 			bomberman.showStartScreen();
 			bomberman.stage.repaint();
 		}

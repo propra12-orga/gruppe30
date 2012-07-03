@@ -9,6 +9,7 @@ import java.awt.RenderingHints;
 import java.io.*;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Stage extends JPanel {
@@ -335,11 +336,13 @@ public class Stage extends JPanel {
 					if(b1)bomberman.sout.writeBoolean(true);
 					else bomberman.sout.writeBoolean(false);
 					b1 = false;
-					//bomberman.sout.writeBoolean(bomberman.player.isDead);
 					bomberman.sout.flush();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+			    	bomberman.host = false;
+			    	bomberman.client = false;
+			    	bomberman.showStartScreen();
+			    	JOptionPane.showMessageDialog(null, "Connection lost!","Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				}
 				// erhaltene Daten interpretieren
 				try {
@@ -372,10 +375,12 @@ public class Stage extends JPanel {
 					}
 					b2 = false;
 					}
-					//bomberman.player2.isDead = bomberman.sin.readBoolean();
 					}catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+						bomberman.host = false;
+				    	bomberman.client = false;
+				    	bomberman.showStartScreen();
+				    	JOptionPane.showMessageDialog(null, "Connection lost!","Error", JOptionPane.INFORMATION_MESSAGE);
+						return;
 				}
 			}
 			if(bomberman.client){
@@ -395,11 +400,13 @@ public class Stage extends JPanel {
 					if(b2)bomberman.cout.writeBoolean(true);
 					else bomberman.cout.writeBoolean(false);
 					b2 = false;
-					//bomberman.cout.writeBoolean(bomberman.player2.isDead);
 					bomberman.cout.flush();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					bomberman.host = false;
+			    	bomberman.client = false;
+			    	bomberman.showStartScreen();
+			    	JOptionPane.showMessageDialog(null, "Connection lost!","Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				}
 				// erhaltene Daten interpretieren
 				try {
@@ -432,10 +439,12 @@ public class Stage extends JPanel {
 					}
 					b1 = false;
 					}
-					//bomberman.player.isDead = bomberman.cin.readBoolean();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					bomberman.host = false;
+			    	bomberman.client = false;
+			    	bomberman.showStartScreen();
+			    	JOptionPane.showMessageDialog(null, "Connection lost!","Error", JOptionPane.INFORMATION_MESSAGE);
+					return;
 				}
 			}
 			for (int x = 0; x < 17; x++) {

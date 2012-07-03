@@ -38,6 +38,9 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	boolean host;
 	boolean client;
 	int playerCount, player1win = 0, player2win = 0, Continue;
+	ServerSocket serverSocket;
+	Socket clientSocket;
+	Socket socket;
 	DataOutputStream sout;
 	DataOutputStream cout;
 	DataInputStream sin;
@@ -250,10 +253,10 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 	 * @param welches level soll gestartet werden
 	 */
 	public void startGame(int playerCount, int level) {
-		if (host){
+		if (host && !isRunning){
 			 try
 			    {
-			      ServerSocket serverSocket = new ServerSocket(1234);
+			      serverSocket = new ServerSocket(1234);
 			      
 			      Object[] options = {"Ok","Abbrechen"};
 					int selected = JOptionPane.showOptionDialog(null,"You will wait 15 seconds for client.", "Status", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
@@ -265,7 +268,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 					        return;
 					}
 				  serverSocket.setSoTimeout(15000);
-				  Socket clientSocket = serverSocket.accept();
+				  clientSocket = serverSocket.accept();
 			      sout = new DataOutputStream(clientSocket.getOutputStream());
 			      sin = new DataInputStream(clientSocket.getInputStream());
 			    }
@@ -278,7 +281,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 					return;
 			    }
 		}
-		if (client){
+		if (client && !isRunning){
 			String ip = JOptionPane.showInputDialog(null, "Insert IP", "Connect", JOptionPane.PLAIN_MESSAGE);
 			if(ip == null){
 				client = false;
@@ -289,7 +292,7 @@ public class Bomberman extends JFrame implements KeyListener, ActionListener, Mo
 			else{
 			try
 		    {
-		      Socket socket = new Socket (ip, 1234);
+		      socket = new Socket (ip, 1234);
 		      cout = new DataOutputStream(socket.getOutputStream());
 		      cin = new DataInputStream(socket.getInputStream());
 		    }
