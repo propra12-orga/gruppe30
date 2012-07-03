@@ -1,5 +1,5 @@
 /**
- * Das Menü-Interface
+ * Das Menï¿½-Interface
  */
 
 import java.awt.Event;
@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -150,7 +149,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 				bomberman.serverSocket.close();
 				bomberman.clientSocket.close();
 				bomberman.socket.close();
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				System.out.println("Couldn't close sockets");
 			}
 			bomberman.host = false;
@@ -165,7 +164,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 				bomberman.serverSocket.close();
 				bomberman.clientSocket.close();
 				bomberman.socket.close();
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				System.out.println("Couldn't close sockets");
 			}
 			bomberman.player1win = 0;
@@ -194,7 +193,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			// Spiel speichern
 			try {
 				bomberman.stage.save("src/res/savegame");
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -205,7 +204,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 				bomberman.serverSocket.close();
 				bomberman.clientSocket.close();
 				bomberman.socket.close();
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				System.out.println("Couldn't close sockets");
 			}
 			bomberman.host = false;
@@ -218,7 +217,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 				bomberman.serverSocket.close();
 				bomberman.clientSocket.close();
 				bomberman.socket.close();
-			} catch (IOException e1) {
+			} catch (Exception e1) {
 				System.out.println("Couldn't close sockets");
 			}
 			bomberman.host = false;
@@ -250,12 +249,12 @@ public class MenuBar extends JMenuBar implements ActionListener {
 			bomberman.sound = false;
 		}
 		else if(e.getSource() == newLevel) {
-			// Level-Editor für neues level starten
+			// Level-Editor fï¿½r neues level starten
 			bomberman.startEditor("src/res/leer.txt");
 			
 		}
 		else if(e.getSource() == editLevel) {
-			// Level-Editor für schon bestehendes level starten
+			// Level-Editor fï¿½r schon bestehendes level starten
 			String option[] = new String[bomberman.levelMap.size()];
 			for(int i = 0; i < bomberman.levelMap.size(); i++){
 				option[i] = new File(bomberman.levelMap.get("" + i)).getName();
@@ -266,11 +265,11 @@ public class MenuBar extends JMenuBar implements ActionListener {
 		else if(e.getSource() == gruppe30) {
 			// Gruppe30 Info anzeigen
 			String message = "Gruppe30 2012\n"
-					+ "Heinrich Heine Universität Düsseldorf\n\n"
+					+ "Heinrich Heine Universitï¿½t Dï¿½sseldorf\n\n"
 					+ "Pavel Kopylov\n"
 					+ "Markus Schirmer\n"
 					+ "Marc Neveling\n"
-					+ "Sebastian Kreuß\n\n"
+					+ "Sebastian Kreuï¿½\n\n"
 					+ "Monsters: http://blog.spoongraphics.co.uk  \n\n";
 			JOptionPane.showMessageDialog(bomberman, message, "About Gruppe30", JOptionPane.INFORMATION_MESSAGE);
 		}

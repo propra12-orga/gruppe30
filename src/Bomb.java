@@ -38,96 +38,34 @@ public class Bomb {
 				owner.setActiveBombs(owner.getActiveBombs()-1);
 				Point origin = new Point(getExplosionArray().get(0));
 				
-				
-				
 				// Bomben kollision
-				for(int i = 1; i <= radius; i++){
-					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BLOCK)){
-						break;
-					}
-					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BOX)){
-						bomberman.stage.destroyBox(new Point(origin.x, origin.y-i));
-						break;
-					}
-					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BOXGATE)){
-						bomberman.stage.destroyBox(new Point(origin.x, origin.y-i));
-						break;
-					}
-					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.BOMBUP)){
-						bomberman.stage.destroyPU(new Point(origin.x, origin.y-i));
-						break;
-					}
-					if(origin.y-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y-i), Stage.POWERUP)){
-						bomberman.stage.destroyPU(new Point(origin.x, origin.y-i));
-						break;
-					}
-				}
-				
-				for(int i = 1; i <= radius; i++){
-					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BLOCK)){
-						break;
-					}
-					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BOX)){
-						bomberman.stage.destroyBox(new Point(origin.x, origin.y+i));
-						break;
-					}
-					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BOXGATE)){
-						bomberman.stage.destroyBox(new Point(origin.x, origin.y+i));
-						break;
-					}
-					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.BOMBUP)){
-						bomberman.stage.destroyPU(new Point(origin.x, origin.y+i));
-						break;
-					}
-					if(origin.y+i <= 12 && bomberman.stage.isPointOnField(new Point(origin.x, origin.y+i), Stage.POWERUP)){
-						bomberman.stage.destroyPU(new Point(origin.x, origin.y+i));
-						break;
-					}
-				}
-				
-				for(int i = 1; i <= radius; i++){
-
-					if(origin.x-i >= 0 && bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BLOCK)){
-
-						break;
-					}
-					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BOX)){
-						bomberman.stage.destroyBox(new Point(origin.x-i, origin.y));
-						break;
-					}
-					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BOXGATE)){
-						bomberman.stage.destroyBox(new Point(origin.x-i, origin.y));
-						break;
-					}
-					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.BOMBUP)){
-						bomberman.stage.destroyPU(new Point(origin.x-i, origin.y));
-						break;
-					}
-					if(origin.x-i >= 0 &&bomberman.stage.isPointOnField(new Point(origin.x-i, origin.y), Stage.POWERUP)){
-						bomberman.stage.destroyPU(new Point(origin.x-i, origin.y));
-						break;
-					}
-				}
-				
-				for(int i = 1; i <= radius; i++){
-					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BLOCK)){
-						break;
-					}
-					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOX)){
-						bomberman.stage.destroyBox(new Point(origin.x+i, origin.y));
-						break;
-					}
-					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOXGATE)){
-						bomberman.stage.destroyBox(new Point(origin.x+i, origin.y));
-						break;
-					}
-					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.BOMBUP)){
-						bomberman.stage.destroyPU(new Point(origin.x+i, origin.y));
-						break;
-					}
-					if(origin.x+i <= 16 && bomberman.stage.isPointOnField(new Point(origin.x+i, origin.y), Stage.POWERUP)){
-						bomberman.stage.destroyPU(new Point(origin.x+i, origin.y));
-						break;
+				for (int angle = 0; angle < 360; angle += 90) {
+					double radian = Math.toRadians(angle);
+					int x = (int)Math.cos(radian);
+					int y = (int)Math.sin(radian);
+					for(int i = 1; i <= radius; i++) {
+						Point p = new Point(origin.x + x * i, origin.y + y * i);
+						if (origin.x + x * i >= 0 && origin.x + x * i <= 16 && origin.y + y * i >= 0 && origin.y + y * i<= 12) {
+							if(bomberman.stage.isPointOnField(new Point(p), Stage.BLOCK)){
+								break;
+							}
+							if(bomberman.stage.isPointOnField(new Point(p), Stage.BOX)){
+								bomberman.stage.destroyBox(new Point(p));
+								break;
+							}
+							if(bomberman.stage.isPointOnField(new Point(p), Stage.BOXGATE)){
+								bomberman.stage.destroyBox(new Point(p));
+								break;
+							}
+							if(bomberman.stage.isPointOnField(new Point(p), Stage.BOMBUP)){
+								bomberman.stage.destroyPU(new Point(p));
+								break;
+							}
+							if(bomberman.stage.isPointOnField(new Point(p), Stage.POWERUP)){
+								bomberman.stage.destroyPU(new Point(p));
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -158,8 +96,8 @@ public class Bomb {
 	}
 	
 	/**
-	 * prüft ob die Bombe auf dem feld an Punkt p gesetzt werden kann oder ob dort schon eine bombe liegt
-	 * @param p Punkt an dem grprüft wird
+	 * prï¿½ft ob die Bombe auf dem feld an Punkt p gesetzt werden kann oder ob dort schon eine bombe liegt
+	 * @param p Punkt an dem grprï¿½ft wird
 	 * @return
 	 */
 	public boolean canLayOn(Point p){
@@ -174,7 +112,7 @@ public class Bomb {
 	}
 	
 	/**
-	 * Prüft ob an der Feld-Position p eine Explosion sichtbar sein darf
+	 * Prï¿½ft ob an der Feld-Position p eine Explosion sichtbar sein darf
 	 * @param p Feld-Position
 	 * @return
 	 */
