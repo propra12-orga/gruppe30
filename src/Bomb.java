@@ -146,42 +146,23 @@ public class Bomb {
 		List<Point> explosionArray = new ArrayList<Point>();
 		if (radius > 0)
 			explosionArray.add(position);
-		for (int i = 1; i < radius; i++) {
-			if (canExplodeTo(new Point(position.x + i, position.y))) {
-				explosionArray.add(new Point(position.x + i, position.y));
-			}
-			else {
-				break;
+		
+		for (int angle = 0; angle < 360; angle += 90) {
+			double radian = Math.toRadians(angle);
+			int x = (int)Math.cos(radian);
+			int y = (int)Math.sin(radian);
+		
+			for (int i = 1; i < radius; i++) {
+				Point p = new Point(position.x + x * i, position.y + y * i);
+				if (canExplodeTo(new Point(p))) {
+					explosionArray.add(new Point(p));
+				}
+				else {
+					break;
+				}
 			}
 		}
-		
-		for (int i = 1; i < radius; i++) {
-			if (canExplodeTo(new Point(position.x - i, position.y))) {
-				explosionArray.add(new Point(position.x - i, position.y));
-			}
-			else {
-				break;
-			}
-		}
-		
-		for (int i = 1; i < radius; i++) {
-			if (canExplodeTo(new Point(position.x, position.y + i))) {
-				explosionArray.add(new Point(position.x, position.y + i));
-			}
-			else {
-				break;
-			}
-		}
-		
-		for (int i = 1; i < radius; i++) {
-			if (canExplodeTo(new Point(position.x, position.y - i))) {
-				explosionArray.add(new Point(position.x, position.y - i));
-			}
-			else {
-				break;
-			}
-		}
-		
+	
 		return explosionArray;
 	}
 }
